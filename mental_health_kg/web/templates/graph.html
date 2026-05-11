@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>知识图谱浏览 - 精神障碍知识图谱助手</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.26.0/cytoscape.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --bg-color: #f5f7fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-color);
+            color: #333;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: var(--secondary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-link {
+            padding: 8px 18px;
+            border-radius: 20px;
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* 主容器 */
+        .main-container {
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 20px;
+        }
+
+        /* 搜索面板 */
+        .search-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        .panel-title {
+            font-size: 1.3em;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .search-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, var(--primary-color), #2980b9);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        /* 统计卡片 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            font-size: 0.85em;
+            opacity: 0.9;
+        }
+
+        /* 结果区域 */
+        .results-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .result-section {
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 1.1em;
+            color: var(--secondary-color);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title .icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.9em;
+        }
+
+        .section-title.symptoms .icon { background: #27ae60; }
+        .section-title.drugs .icon { background: #3498db; }
+        .section-title.diseases .icon { background: #e74c3c; }
+
+        .result-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .result-item {
+            background: #f5f7fa;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            color: #555;
+            border: 1px solid #e0e0e0;
+            transition: all 0.2s;
+        }
+
+        .result-item:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* 图谱可视化 */
+        .graph-container {
+            background: #fafafa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        #cy {
+            width: 100%;
+            height: 500px;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+        }
+
+        /* 提示信息 */
+        .info-message {
+            text-align: center;
+            padding: 60px 20px;
+            color: #888;
+        }
+
+        .info-message .icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .info-message p {
+            max-width: 400px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* 加载状态 */
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 900px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+
+            .search-panel {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/" class="logo">
+            <span>🧠</span>
+            <span>精神障碍知识图谱助手</span>
+        </a>
+        <div class="nav-links">
+            <a href="/graph" class="nav-link active">📊 图谱浏览</a>
+            <a href="/qa" class="nav-link">❓ 知识问答</a>
+            <a href="/hallucination" class="nav-link">🔍 幻觉检测</a>
+            <a href="/experiments" class="nav-link">📈 实验结果</a>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <aside class="search-panel">
+            <h2 class="panel-title">🔍 搜索疾病</h2>
+
+            <div class="search-box">
+                <input type="text" id="diseaseInput" class="search-input"
+                       placeholder="输入疾病名称，如：抑郁症、Depression..."
+                       onkeypress="handleKeyPress(event)">
+                <div style="height: 10px;"></div>
+                <button class="search-btn" onclick="searchDisease()">
+                    搜索
+                </button>
+            </div>
+
+            <div class="stats-grid" id="statsGrid" style="display: none;">
+                <div class="stat-card">
+                    <div class="stat-value" id="symptomCount">0</div>
+                    <div class="stat-label">相关症状</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="drugCount">0</div>
+                    <div class="stat-label">相关药物</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="relatedCount">0</div>
+                    <div class="stat-label">相关疾病</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalRelations">0</div>
+                    <div class="stat-label">总关系数</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <h3 style="font-size: 1em; color: #555; margin-bottom: 10px;">热门疾病</h3>
+                <div class="result-list" id="hotDiseases">
+                    <span class="result-item" onclick="searchHotDisease('Depression')">抑郁症</span>
+                    <span class="result-item" onclick="searchHotDisease('Anxiety')">焦虑障碍</span>
+                    <span class="result-item" onclick="searchHotDisease('Schizophrenia')">精神分裂症</span>
+                    <span class="result-item" onclick="searchHotDisease('Bipolar')">双相障碍</span>
+                    <span class="result-item" onclick="searchHotDisease('PTSD')">PTSD</span>
+                    <span class="result-item" onclick="searchHotDisease('OCD')">强迫症</span>
+                </div>
+            </div>
+        </aside>
+
+        <main class="results-panel">
+            <div class="info-message" id="infoMessage">
+                <div class="icon">🕸️</div>
+                <h3>知识图谱浏览</h3>
+                <p>在左侧搜索框中输入疾病名称，开始探索精神障碍与症状、药物之间的关系网络</p>
+            </div>
+
+            <div id="resultsContainer" style="display: none;">
+                <h2 id="diseaseTitle" style="color: var(--secondary-color); margin-bottom: 20px;"></h2>
+
+                <div class="result-section">
+                    <h3 class="section-title symptoms">
+                        <span class="icon">🩺</span>
+                        相关症状
+                    </h3>
+                    <div class="result-list" id="symptomsList"></div>
+                </div>
+
+                <div class="result-section">
+                    <h3 class="section-title drugs">
+                        <span class="icon">💊</span>
+                        相关药物
+                    </h3>
+                    <div class="result-list" id="drugsList"></div>
+                </div>
+
+                <div class="result-section">
+                    <h3 class="section-title diseases">
+                        <span class="icon">🔗</span>
+                        相关疾病
+                    </h3>
+                    <div class="result-list" id="diseasesList"></div>
+                </div>
+
+                <div class="graph-container">
+                    <h3 class="section-title">
+                        <span class="icon">🕸️</span>
+                        关系网络图
+                    </h3>
+                    <div id="cy"></div>
+                </div>
+            </div>
+
+            <div class="loading" id="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>正在加载数据...</p>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let cy = null;
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                searchDisease();
+            }
+        }
+
+        function ensureArray(value) {
+            return Array.isArray(value) ? value : [];
+        }
+
+        function escapeHtml(value) {
+            return String(value ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function truncateText(value, maxLength) {
+            const text = String(value ?? '');
+            return text.length > maxLength ? `${text.slice(0, maxLength - 3)}...` : text;
+        }
+
+        async function searchDisease() {
+            const disease = document.getElementById('diseaseInput').value.trim();
+            if (!disease) {
+                alert('请输入疾病名称');
+                return;
+            }
+
+            showLoading();
+
+            try {
+                const response = await fetch('/api/search_disease', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ disease })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || '搜索失败，请重试');
+                }
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                displayResults(data);
+            } catch (error) {
+                console.error('Graph search error:', error);
+                hideLoading();
+                alert(error.message || '搜索失败，请重试');
+            }
+        }
+
+        function searchHotDisease(disease) {
+            document.getElementById('diseaseInput').value = disease;
+            searchDisease();
+        }
+
+        function showLoading() {
+            document.getElementById('infoMessage').style.display = 'none';
+            document.getElementById('resultsContainer').style.display = 'none';
+            document.getElementById('loading').style.display = 'block';
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        function renderList(containerId, items, clickable = false) {
+            const container = document.getElementById(containerId);
+            const safeItems = ensureArray(items);
+
+            if (safeItems.length === 0) {
+                container.innerHTML = '<span class="result-item">暂无数据</span>';
+                return;
+            }
+
+            container.innerHTML = safeItems.map(item => {
+                const rawName = item.name || '未命名';
+                const rawRelation = item.relation || 'related';
+                const name = escapeHtml(rawName);
+                const relation = escapeHtml(rawRelation);
+                const searchName = escapeHtml(item.search_name || item.name || rawName);
+
+                if (clickable) {
+                    return `<span class="result-item related-disease-item" title="${relation}" data-disease="${searchName}">${name}</span>`;
+                }
+
+                return `<span class="result-item" title="${relation}">${name}</span>`;
+            }).join('');
+
+            if (clickable) {
+                container.querySelectorAll('.related-disease-item').forEach(element => {
+                    element.addEventListener('click', () => {
+                        searchHotDisease(element.dataset.disease);
+                    });
+                });
+            }
+        }
+
+        function displayResults(data) {
+            const symptoms = ensureArray(data.symptoms);
+            const drugs = ensureArray(data.drugs);
+            const relatedDiseases = ensureArray(data.related_diseases);
+
+            document.getElementById('infoMessage').style.display = 'none';
+            document.getElementById('resultsContainer').style.display = 'block';
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('statsGrid').style.display = 'grid';
+
+            document.getElementById('symptomCount').textContent = data.total_symptoms || symptoms.length;
+            document.getElementById('drugCount').textContent = data.total_drugs || drugs.length;
+            document.getElementById('relatedCount').textContent = data.total_related || relatedDiseases.length;
+            document.getElementById('totalRelations').textContent =
+                (data.total_symptoms || symptoms.length) +
+                (data.total_drugs || drugs.length) +
+                (data.total_related || relatedDiseases.length);
+
+            document.getElementById('diseaseTitle').textContent = data.disease || '未命名疾病';
+
+            renderList('symptomsList', symptoms);
+            renderList('drugsList', drugs);
+            renderList('diseasesList', relatedDiseases, true);
+
+            renderGraph(data.network);
+        }
+
+        function renderGraph(networkData) {
+            const container = document.getElementById('cy');
+
+            if (cy) {
+                cy.destroy();
+                cy = null;
+            }
+
+            container.innerHTML = '';
+
+            const rawNodes = ensureArray(networkData?.nodes);
+            const rawEdges = ensureArray(networkData?.edges);
+
+            const nodeElements = rawNodes
+                .filter(node => node && node.id != null && node.name != null)
+                .map(node => {
+                    const nodeId = String(node.id);
+                    const nodeType = String(node.type || 'other');
+                    const nodeLevel = Number(node.level || 0);
+
+                    return {
+                        data: {
+                            id: nodeId,
+                            label: truncateText(node.name, 25),
+                            fullLabel: String(node.name),
+                            type: nodeType,
+                            level: nodeLevel
+                        },
+                        classes: `${nodeType}-node ${nodeLevel === 0 ? 'center-node' : 'outer-node'}`
+                    };
+                });
+
+            if (nodeElements.length === 0) {
+                container.innerHTML = '<div class="info-message" style="padding: 80px 20px;">暂无可视化图谱数据</div>';
+                return;
+            }
+
+            const nodeIds = new Set(nodeElements.map(node => node.data.id));
+
+            const edgeElements = rawEdges
+                .filter(edge =>
+                    edge &&
+                    edge.source != null &&
+                    edge.target != null &&
+                    nodeIds.has(String(edge.source)) &&
+                    nodeIds.has(String(edge.target))
+                )
+                .map((edge, index) => ({
+                    data: {
+                        id: `edge_${index}`,
+                        source: String(edge.source),
+                        target: String(edge.target),
+                        label: truncateText(edge.relation || 'related', 15),
+                        fullLabel: String(edge.relation || 'related')
+                    }
+                }));
+
+            cy = cytoscape({
+                container,
+                elements: [...nodeElements, ...edgeElements],
+                style: [
+                    {
+                        selector: 'node',
+                        style: {
+                            'label': 'data(label)',
+                            'text-valign': 'bottom',
+                            'text-halign': 'center',
+                            'font-size': 10,
+                            'color': '#333',
+                            'text-wrap': 'wrap',
+                            'text-max-width': 90,
+                            'border-width': 2,
+                            'border-color': '#fff'
+                        }
+                    },
+                    {
+                        selector: '.center-node',
+                        style: {
+                            'width': 80,
+                            'height': 40,
+                            'font-size': 12
+                        }
+                    },
+                    {
+                        selector: '.outer-node',
+                        style: {
+                            'width': 50,
+                            'height': 30,
+                            'font-size': 9
+                        }
+                    },
+                    {
+                        selector: '.disease-node',
+                        style: {
+                            'background-color': '#e74c3c',
+                            'shape': 'round-rectangle'
+                        }
+                    },
+                    {
+                        selector: '.symptom-node',
+                        style: {
+                            'background-color': '#27ae60',
+                            'shape': 'ellipse'
+                        }
+                    },
+                    {
+                        selector: '.drug-node',
+                        style: {
+                            'background-color': '#3498db',
+                            'shape': 'diamond'
+                        }
+                    },
+                    {
+                        selector: 'node[type = "other"]',
+                        style: {
+                            'background-color': '#95a5a6',
+                            'shape': 'ellipse'
+                        }
+                    },
+                    {
+                        selector: 'edge',
+                        style: {
+                            'width': 2,
+                            'line-color': '#a0aec0',
+                            'target-arrow-color': '#a0aec0',
+                            'target-arrow-shape': 'triangle',
+                            'curve-style': 'bezier',
+                            'label': 'data(label)',
+                            'font-size': 8,
+                            'text-opacity': 0.7,
+                            'color': '#666'
+                        }
+                    }
+                ],
+                layout: edgeElements.length > 0 ? {
+                    name: 'cose',
+                    padding: 50,
+                    nodeRepulsion: 8000,
+                    idealEdgeLength: 100,
+                    edgeElasticity: 100,
+                    animate: false
+                } : {
+                    name: 'grid',
+                    fit: true,
+                    padding: 30
+                },
+                wheelSensitivity: 0.3
+            });
+
+            cy.on('tap', 'node', function(evt) {
+                const node = evt.target;
+                alert(`节点: ${node.data('fullLabel')}\n类型: ${node.data('type')}`);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+# 精神障碍知识图谱分析与可信问答系统依赖
+# Mental Health Knowledge Graph Analysis System Dependencies
+
+# 核心数据处理
+pandas>=1.4.0
+numpy>=1.21.0
+networkx>=2.6.0
+
+# 知识图谱嵌入
+pykeen>=1.10.0
+torch>=1.10.0
+
+# 机器学习与可视化
+scikit-learn>=1.0.0
+matplotlib>=3.5.0
+seaborn>=0.11.0
+
+# Web框架
+flask>=2.0.0
+
+# 向量数据库（可选）
+# chromadb>=0.4.0
+# sentence-transformers>=2.0.0
+
+# LLM集成（可选）
+# openai>=0.27.0
+# langchain>=0.0.0
+
+# 工具库
+requests>=2.25.0
+tqdm>=4.60.0

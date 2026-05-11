@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>精神障碍知识图谱助手</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        /* 首页样式 */
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --bg-color: #ecf0f1;
+            --card-bg: #ffffff;
+            --text-color: #2c3e50;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .navbar-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: var(--secondary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-color), #2c3e50);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-link {
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            color: var(--secondary-color);
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* 英雄区域 */
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero p {
+            font-size: 1.3em;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            opacity: 0.95;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 功能卡片 */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            text-decoration: none;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), #764ba2);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .feature-card:nth-child(1) .feature-icon {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .feature-card:nth-child(2) .feature-icon {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+        }
+
+        .feature-card:nth-child(3) .feature-icon {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .feature-card:nth-child(4) .feature-icon {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white;
+        }
+
+        .feature-card h3 {
+            font-size: 1.4em;
+            margin-bottom: 10px;
+            color: var(--secondary-color);
+        }
+
+        .feature-card p {
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+
+        /* 项目简介 */
+        .project-info {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 50px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .project-info h2 {
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .project-info p {
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .tech-tag {
+            background: linear-gradient(135deg, var(--primary-color), #764ba2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        /* 页脚 */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: white;
+            opacity: 0.8;
+        }
+
+        .footer p {
+            margin-bottom: 10px;
+        }
+
+        .disclaimer {
+            font-size: 0.85em;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5em;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .navbar-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="/" class="logo">
+                <div class="logo-icon">🧠</div>
+                <span>精神障碍知识图谱助手</span>
+            </a>
+            <div class="nav-links">
+                <a href="/graph" class="nav-link">📊 图谱浏览</a>
+                <a href="/qa" class="nav-link">❓ 知识问答</a>
+                <a href="/hallucination" class="nav-link">🔍 幻觉检测</a>
+                <a href="/experiments" class="nav-link">📈 实验结果</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <section class="hero">
+            <h1>🧠 精神障碍知识图谱分析与可信问答系统</h1>
+            <p>基于 PrimeKG 知识图谱，融合知识图谱嵌入、LLM 幻觉检测与 RAG 增强问答技术，
+               为心理学学习与科研提供可交互的分析工具</p>
+        </section>
+
+        <section class="features">
+            <a href="/graph" class="feature-card">
+                <div class="feature-icon">🕸️</div>
+                <h3>知识图谱浏览</h3>
+                <p>搜索精神障碍名称，可视化展示相关症状、药物、疾病类别和关系网络图，深入了解疾病关联结构</p>
+            </a>
+
+            <a href="/qa" class="feature-card">
+                <div class="feature-icon">💬</div>
+                <h3>疾病知识问答</h3>
+                <p>自然语言提问，系统基于 RAG 增强回答，同时展示支持回答的 PrimeKG 三元组证据</p>
+            </a>
+
+            <a href="/hallucination" class="feature-card">
+                <div class="feature-icon">🔍</div>
+                <h3>LLM 幻觉检测</h3>
+                <p>评估 LLM 在精神障碍知识上的幻觉倾向，对比真实三元组与伪造三元组的判断准确率</p>
+            </a>
+
+            <a href="/experiments" class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>模型实验结果</h3>
+                <p>展示 TransE、RotatE 链接预测性能对比，以及疾病大类预测结果分析</p>
+            </a>
+        </section>
+
+        <section class="project-info">
+            <h2>📖 项目介绍</h2>
+            <p>
+                本项目基于 <strong>PrimeKG（Precision Medicine Knowledge Graph）</strong> 构建一个面向心理学与精神健康领域的知识图谱分析系统。
+                PrimeKG 整合了 20 个高质量生物医学资源，描述了 17,080 种疾病和超过 405 万条关系。
+            </p>
+            <p>
+                系统核心功能包括：<br>
+                1. <strong>子图提取与分析</strong>：从 PrimeKG 中提取精神障碍子图，分析其本体结构、节点类型分布、关系类型分布<br>
+                2. <strong>知识图谱嵌入</strong>：训练 TransE 与 RotatE 模型，通过 MRR、Hits@K 等指标评估链接预测性能<br>
+                3. <strong>疾病大类预测</strong>：基于图嵌入表示对疾病节点进行分类，探索图谱结构反映的疾病相似性<br>
+                4. <strong>LLM 幻觉检测</strong>：评估 LLM 在精神障碍知识上的幻觉倾向，区分真实与伪造三元组<br>
+                5. <strong>RAG 增强问答</strong>：对比纯 LLM 与 RAG 在回答准确性、证据可追溯性上的差异
+            </p>
+
+            <h3 style="margin-top: 25px; color: var(--secondary-color);">🔧 技术栈</h3>
+            <div class="tech-stack">
+                <span class="tech-tag">PrimeKG</span>
+                <span class="tech-tag">PyKEEN</span>
+                <span class="tech-tag">NetworkX</span>
+                <span class="tech-tag">TransE / RotatE</span>
+                <span class="tech-tag">ChromaDB</span>
+                <span class="tech-tag">Sentence-Transformers</span>
+                <span class="tech-tag">Flask</span>
+                <span class="tech-tag">Cytoscape.js</span>
+                <span class="tech-tag">Python</span>
+            </div>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <p>精神障碍知识图谱助手 &copy; 2024</p>
+        <div class="disclaimer">
+            ⚠️ <strong>免责声明</strong>：本系统仅供心理学课程学习、教学展示和科研辅助使用，
+            不用于真实临床诊断或治疗决策。如有心理健康问题，请咨询专业医疗人员。
+        </div>
+    </footer>
+</body>
+</html>
