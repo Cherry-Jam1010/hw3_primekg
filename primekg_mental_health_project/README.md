@@ -85,6 +85,30 @@ python primekg_mental_health_project/main.py step2_prep
 .venv\Scripts\python.exe primekg_mental_health_project/main.py step6_demo
 ```
 
+## GitHub Pages 发布
+
+当前前端可以直接作为静态站点发布到 GitHub Pages。
+
+仓库里已经提供了工作流：
+
+- `.github/workflows/deploy-primekg-pages.yml`
+
+它会把下面这组静态文件发布出去：
+
+- `primekg_mental_health_project/demo/index.html`
+- `primekg_mental_health_project/demo/demo_payload.json`
+
+如果仓库是 `Cherry-Jam1010/hw3_primekg`，默认访问地址会是：
+
+- `https://cherry-jam1010.github.io/hw3_primekg/`
+
+启用方式：
+
+1. 打开仓库 `Settings`
+2. 进入 `Pages`
+3. 在 `Source` 里选择 `GitHub Actions`
+4. 推送一次前端相关更新，或手动运行 `Deploy PrimeKG Frontend to Pages`
+
 如需在本地启动 demo：
 
 ```bash
