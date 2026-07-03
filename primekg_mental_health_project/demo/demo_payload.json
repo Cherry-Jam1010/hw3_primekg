@@ -1,0 +1,2475 @@
+{
+  "meta": {
+    "title": "PrimeKG 精神健康信息茧房交互演示",
+    "subtitle": "",
+    "generated_at": "2026-07-03 11:08"
+  },
+  "styles": {
+    "restrained": {
+      "label": "克制版",
+      "floating_lines": [
+        "是不是也这样",
+        "转发给需要的人",
+        "我以前一直以为自己只是懒",
+        "症状对上了好几条",
+        "医生可能都没你懂自己"
+      ],
+      "entry_prompt": "粘贴一句你刷到的说法",
+      "button_label": "核查",
+      "panorama_intro": "查看全部核查结果",
+      "slider_left": "纯模型回答",
+      "slider_right": "图谱增强回答",
+      "warm_line": "这条问题连光都照不进去",
+      "closing": "算法能喂给你信息，但事实需要被验证",
+      "status_labels": {
+        "supported": "图谱支持",
+        "partial": "部分属实",
+        "unsupported": "图谱不支持",
+        "uncovered": "无相关记录"
+      }
+    },
+    "impact": {
+      "label": "冲击版",
+      "floating_lines": [
+        "15秒告诉你，你可能有病",
+        "中了3条以上就要小心了",
+        "我靠这也太准了",
+        "原来我一直被误诊",
+        "算法比你更懂你自己"
+      ],
+      "entry_prompt": "你信的，是真的吗",
+      "button_label": "戳破它",
+      "panorama_intro": "茧房到底有多厚",
+      "slider_left": "没有光照进来",
+      "slider_right": "光照进来之后",
+      "warm_line": "需要跨越多条关系才能验证",
+      "closing": "戳破的不是内容，是懒得核实的习惯",
+      "status_labels": {
+        "supported": "是真的",
+        "partial": "真假参半",
+        "unsupported": "编的",
+        "uncovered": "查无此说"
+      }
+    },
+    "academic": {
+      "label": "学术版",
+      "floating_lines": [
+        "基于DSM标准整理（未标注来源）",
+        "参考精神科医生说法（未附链接）",
+        "网友亲测有效",
+        "综合多篇论文整理（未附引用）",
+        "心理学博主独家总结"
+      ],
+      "entry_prompt": "输入待核验陈述",
+      "button_label": "提交核验",
+      "panorama_intro": "查看聚合统计",
+      "slider_left": "纯基线模型",
+      "slider_right": "图谱增强回答",
+      "warm_line": "口语表达与图谱术语不匹配",
+      "closing": "结构化知识图谱可作为LLM输出的部分事实约束，但对多跳推理与语义鸿沟类问题效果有限",
+      "status_labels": {
+        "supported": "有据可查",
+        "partial": "部分成立",
+        "unsupported": "无法证实",
+        "uncovered": "图谱未覆盖"
+      }
+    }
+  },
+  "style_themes": {
+    "restrained": {
+      "accent": "#90f9df",
+      "accent_soft": "rgba(144,249,223,0.18)",
+      "glow": "#d5a13f"
+    },
+    "impact": {
+      "accent": "#ff7f50",
+      "accent_soft": "rgba(255,127,80,0.18)",
+      "glow": "#ffca6f"
+    },
+    "academic": {
+      "accent": "#8cd4ff",
+      "accent_soft": "rgba(140,212,255,0.18)",
+      "glow": "#a8f0ff"
+    }
+  },
+  "placeholders": [
+    "ADHD的人晚上更容易报复性熬夜，因为多巴胺水平异常",
+    "精神内耗其实就是轻度抑郁的表现",
+    "PTSD患者不能提起创伤事件，否则会复发"
+  ],
+  "loading_texts": [
+    "正在图谱中检索…",
+    "光正在穿过茧房…",
+    "检索结构化知识源…"
+  ],
+  "result_notes": [
+    "依据：ADHD — has_symptom → 睡眠紊乱",
+    "图谱中无对应因果关系记录",
+    "该表述涉及图谱未覆盖的关系类型"
+  ],
+  "usage_notes": [
+    "第44-49条是专门为Step 5\"RAG失效场景分析\"设计的，建议在报告里重点展开这几条的对比结果",
+    "第7条特意设置了一个\"图谱未覆盖但陈述本身不算编造\"的边界案例，可用来说明\"无相关记录\"和\"图谱不支持\"这两种判定的区别，这个区分本身也是一个值得在报告中讨论的细节",
+    "第50条的\"抑郁多动症\"是一个完全虚构的疾病实体，适合用来测试LLM是否会顺着用户的话编出一个不存在的诊断类别，这类\"迎合式幻觉\"往往比事实性错误更隐蔽"
+  ],
+  "summary_tables": [
+    {
+      "title": "子图与数据集",
+      "rows": [
+        {
+          "label": "种子疾病数",
+          "value": "76"
+        },
+        {
+          "label": "子图节点数",
+          "value": "732"
+        },
+        {
+          "label": "子图边数",
+          "value": "2646"
+        },
+        {
+          "label": "三元组总数",
+          "value": "2646"
+        },
+        {
+          "label": "训练 / 验证 / 测试",
+          "value": "2151 / 248 / 247"
+        }
+      ]
+    },
+    {
+      "title": "模型结果",
+      "rows": [
+        {
+          "label": "最佳 KGE",
+          "value": "RotatE"
+        },
+        {
+          "label": "最佳 MRR",
+          "value": "16.3%"
+        },
+        {
+          "label": "最佳 Hits@10",
+          "value": "32.0%"
+        },
+        {
+          "label": "最佳分类模型",
+          "value": "ROTATE"
+        },
+        {
+          "label": "分类 Macro-F1",
+          "value": "28.9%"
+        }
+      ]
+    },
+    {
+      "title": "幻觉与校验",
+      "rows": [
+        {
+          "label": "声明总数",
+          "value": "60"
+        },
+        {
+          "label": "真实 / 错误声明",
+          "value": "30 / 30"
+        },
+        {
+          "label": "纯基线准确率",
+          "value": "80.0%"
+        },
+        {
+          "label": "RAG 校验准确率",
+          "value": "100.0%"
+        },
+        {
+          "label": "层级错置识别率",
+          "value": "60.0%"
+        }
+      ]
+    }
+  ],
+  "panorama": {
+    "baseline_accuracy": 0.8,
+    "baseline_hallucination_rate": 0.19999999999999996,
+    "rag_accuracy": 1.0,
+    "rag_hallucination_rate": 0.0,
+    "unresolved_count": 0,
+    "risk_cards": [
+      {
+        "title": "多跳推理",
+        "summary": "需要跨越多条关系链才能完成核验。",
+        "examples": [
+          "ADHD与抑郁症虽不直接等价，但两者可能通过共同的焦虑症状产生关联",
+          "PTSD与抑郁症的共病可能与两者共享的睡眠紊乱症状有关"
+        ]
+      },
+      {
+        "title": "语义鸿沟",
+        "summary": "口语热词与图谱术语之间存在表达落差。",
+        "examples": [
+          "精神内耗是一种脑子转不动的表现（口语热词，图谱中无对应术语）",
+          "emo了是不是就是抑郁症发作（口语热词，图谱中无对应术语）"
+        ]
+      },
+      {
+        "title": "否定性问题",
+        "summary": "“不存在任何关系”这类说法最容易诱发迎合式回答。",
+        "examples": [
+          "抑郁症和ADHD之间不存在任何关系（用于测试RAG对\"不存在\"类问题的处理）",
+          "精神分裂症和双相情感障碍没有任何共同症状（用于测试否定性问题处理）"
+        ]
+      },
+      {
+        "title": "虚构实体",
+        "summary": "不存在的诊断名称会把模型引向更隐蔽的幻觉。",
+        "examples": [
+          "只要同时符合抑郁症和ADHD的三条症状，就可以确诊为\"抑郁多动症\"（图谱中不存在的编造疾病实体）"
+        ]
+      }
+    ]
+  },
+  "claims": [
+    {
+      "sample_id": "false_fabricated_10",
+      "claim_text": "很多科普会说，注意缺陷多动障碍（ADHD） 常见表现之一是 β-淀粉样蛋白免疫反应沉积。",
+      "relation_group": "disease_phenotype",
+      "relation_group_label": "疾病-表型",
+      "false_type": "fabricated",
+      "false_type_label": "凭空编造",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.834,
+      "x_name": "β-淀粉样蛋白免疫反应沉积",
+      "y_name": "注意缺陷多动障碍（ADHD）",
+      "display_relation_label": "表型存在",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "阿尔茨海默病 常见表现为 β-淀粉样蛋白免疫反应沉积。",
+        "注意缺陷多动障碍（ADHD） 常见表现为 注意缺陷多动障碍。",
+        "注意缺陷多动障碍（ADHD） 是下位类型，隶属于 注意缺陷多动障碍·注意缺陷型。"
+      ]
+    },
+    {
+      "sample_id": "false_fabricated_01",
+      "claim_text": "很多科普会提醒，丙戊酸 对 分裂情感性障碍 属于禁忌或不推荐。",
+      "relation_group": "disease_drug",
+      "relation_group_label": "疾病-药物",
+      "false_type": "fabricated",
+      "false_type_label": "凭空编造",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.72,
+      "x_name": "分裂情感性障碍",
+      "y_name": "丙戊酸",
+      "display_relation_label": "禁忌症",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "丙戊酸 对 焦虑障碍 属于禁忌。",
+        "丙戊酸 可用于 bipolar disorder 的超说明书场景。",
+        "丙戊酸 可用于 manic bipolar affective disorder。"
+      ]
+    },
+    {
+      "sample_id": "false_fabricated_02",
+      "claim_text": "很多科普会说，包涵体肌病-佩吉特骨病-额颞叶痴呆综合征 常见表现之一是 特定学习障碍。",
+      "relation_group": "disease_phenotype",
+      "relation_group_label": "疾病-表型",
+      "false_type": "fabricated",
+      "false_type_label": "凭空编造",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.7,
+      "x_name": "包涵体肌病-佩吉特骨病-额颞叶痴呆综合征",
+      "y_name": "特定学习障碍",
+      "display_relation_label": "表型存在",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "包涵体肌病-佩吉特骨病-额颞叶痴呆综合征 常见表现为 痴呆。",
+        "包涵体肌病-佩吉特骨病-额颞叶痴呆综合征 常见表现为 额颞叶痴呆。",
+        "包涵体肌病-佩吉特骨病-额颞叶痴呆综合征 常见表现为 Myopathy。"
+      ]
+    },
+    {
+      "sample_id": "false_fabricated_07",
+      "claim_text": "一些资料会强调，PRKAR1B相关中间丝神经变性性痴呆 通常并不表现为 特定学习障碍。",
+      "relation_group": "disease_phenotype",
+      "relation_group_label": "疾病-表型",
+      "false_type": "fabricated",
+      "false_type_label": "凭空编造",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.688,
+      "x_name": "PRKAR1B相关中间丝神经变性性痴呆",
+      "y_name": "特定学习障碍",
+      "display_relation_label": "表型缺失",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "PRKAR1B相关中间丝神经变性性痴呆 常见表现为 痴呆。",
+        "PRKAR1B相关中间丝神经变性性痴呆 常见表现为 焦虑。",
+        "PRKAR1B相关中间丝神经变性性痴呆 常见表现为 额颞叶痴呆。"
+      ]
+    },
+    {
+      "sample_id": "false_fabricated_04",
+      "claim_text": "很多科普会说，行为变异型额颞叶痴呆 常见表现之一是 动机减退。",
+      "relation_group": "disease_phenotype",
+      "relation_group_label": "疾病-表型",
+      "false_type": "fabricated",
+      "false_type_label": "凭空编造",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.574,
+      "x_name": "行为变异型额颞叶痴呆",
+      "y_name": "动机减退",
+      "display_relation_label": "表型存在",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "行为变异型额颞叶痴呆 常见表现为 额颞叶痴呆。",
+        "语义性痴呆 常见表现为 动机减退。",
+        "行为变异型额颞叶痴呆 常见表现为 行为异常。"
+      ]
+    },
+    {
+      "sample_id": "false_fabricated_03",
+      "claim_text": "很多科普会提醒，布他巴比妥 对 早发性精神分裂症 属于禁忌或不推荐。",
+      "relation_group": "disease_drug",
+      "relation_group_label": "疾病-药物",
+      "false_type": "fabricated",
+      "false_type_label": "凭空编造",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.56,
+      "x_name": "布他巴比妥",
+      "y_name": "早发性精神分裂症",
+      "display_relation_label": "禁忌症",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "早发性精神分裂症 常见表现为 焦虑。",
+        "早发性精神分裂症 常见表现为 幻觉。",
+        "早发性精神分裂症 常见表现为 抑郁性情绪。"
+      ]
+    },
+    {
+      "sample_id": "false_fabricated_09",
+      "claim_text": "很多科普会说，多塞平 可以用于 早发性精神分裂症。",
+      "relation_group": "disease_drug",
+      "relation_group_label": "疾病-药物",
+      "false_type": "fabricated",
+      "false_type_label": "凭空编造",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.557,
+      "x_name": "多塞平",
+      "y_name": "早发性精神分裂症",
+      "display_relation_label": "适应症",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "早发性精神分裂症 常见表现为 焦虑。",
+        "早发性精神分裂症 常见表现为 幻觉。",
+        "早发性精神分裂症 常见表现为 抑郁性情绪。"
+      ]
+    },
+    {
+      "sample_id": "false_fabricated_08",
+      "claim_text": "很多科普会说，卡立普多 可以用于 精神分裂症。",
+      "relation_group": "disease_drug",
+      "relation_group_label": "疾病-药物",
+      "false_type": "fabricated",
+      "false_type_label": "凭空编造",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.531,
+      "x_name": "精神分裂症",
+      "y_name": "卡立普多",
+      "display_relation_label": "适应症",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "卡立普多 对 阿尔茨海默病 属于禁忌。",
+        "早发性精神分裂症 是下位类型，隶属于 精神分裂症。",
+        "偏执型精神分裂症 是下位类型，隶属于 精神分裂症。",
+        "精神分裂症 是下位类型，隶属于 早发性精神分裂症。"
+      ]
+    },
+    {
+      "sample_id": "false_fabricated_06",
+      "claim_text": "很多科普会提醒，非那西汀 对 神经性厌食症 属于禁忌或不推荐。",
+      "relation_group": "disease_drug",
+      "relation_group_label": "疾病-药物",
+      "false_type": "fabricated",
+      "false_type_label": "凭空编造",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.489,
+      "x_name": "神经性厌食症",
+      "y_name": "非那西汀",
+      "display_relation_label": "禁忌症",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "Trolnitrate 对 神经性厌食症 属于禁忌。",
+        "Bupropion 对 神经性厌食症 属于禁忌。",
+        "氟西汀 对 神经性厌食症 属于禁忌。"
+      ]
+    },
+    {
+      "sample_id": "false_fabricated_05",
+      "claim_text": "很多科普会提醒，麦角胺 对 内源性抑郁 属于禁忌或不推荐。",
+      "relation_group": "disease_drug",
+      "relation_group_label": "疾病-药物",
+      "false_type": "fabricated",
+      "false_type_label": "凭空编造",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.427,
+      "x_name": "麦角胺",
+      "y_name": "内源性抑郁",
+      "display_relation_label": "禁忌症",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "氟西汀 可用于 内源性抑郁。",
+        "帕罗西汀 可用于 内源性抑郁。",
+        "奥氮平 可用于 内源性抑郁。"
+      ]
+    },
+    {
+      "sample_id": "false_hierarchy_02",
+      "claim_text": "短视频里有人会说，脑脂质沉积症伴痴呆 可以被归到 焦虑障碍 这个大类下面。",
+      "relation_group": "disease_disease",
+      "relation_group_label": "疾病-疾病",
+      "false_type": "hierarchy_error",
+      "false_type_label": "层级错置",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.622,
+      "x_name": "焦虑障碍",
+      "y_name": "脑脂质沉积症伴痴呆",
+      "display_relation_label": "上下位",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "脑脂质沉积症伴痴呆 是下位类型，隶属于 伴痴呆的代谢性疾病。",
+        "伴痴呆的代谢性疾病 是下位类型，隶属于 脑脂质沉积症伴痴呆。",
+        "瓜德罗普帕金森综合征伴痴呆 常见表现为 痴呆。"
+      ]
+    },
+    {
+      "sample_id": "false_hierarchy_05",
+      "claim_text": "短视频里有人会说，非典型抑郁障碍 可以被归到 额颞叶痴呆 这个大类下面。",
+      "relation_group": "disease_disease",
+      "relation_group_label": "疾病-疾病",
+      "false_type": "hierarchy_error",
+      "false_type_label": "层级错置",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.587,
+      "x_name": "额颞叶痴呆",
+      "y_name": "非典型抑郁障碍",
+      "display_relation_label": "上下位",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "非典型抑郁障碍 是下位类型，隶属于 焦虑障碍。",
+        "焦虑障碍 是下位类型，隶属于 非典型抑郁障碍。",
+        "行为变异型额颞叶痴呆 常见表现为 额颞叶痴呆。"
+      ]
+    },
+    {
+      "sample_id": "false_hierarchy_06",
+      "claim_text": "短视频里有人会说，非典型抑郁障碍 可以被归到 重度抑郁障碍 这个大类下面。",
+      "relation_group": "disease_disease",
+      "relation_group_label": "疾病-疾病",
+      "false_type": "hierarchy_error",
+      "false_type_label": "层级错置",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.561,
+      "x_name": "重度抑郁障碍",
+      "y_name": "非典型抑郁障碍",
+      "display_relation_label": "上下位",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "非典型抑郁障碍 是下位类型，隶属于 焦虑障碍。",
+        "焦虑障碍 是下位类型，隶属于 非典型抑郁障碍。",
+        "氟西汀 可用于 重度抑郁障碍。",
+        "帕罗西汀 可用于 重度抑郁障碍。"
+      ]
+    },
+    {
+      "sample_id": "false_hierarchy_09",
+      "claim_text": "短视频里有人会说，非典型抑郁障碍 可以被归到 人格障碍 这个大类下面。",
+      "relation_group": "disease_disease",
+      "relation_group_label": "疾病-疾病",
+      "false_type": "hierarchy_error",
+      "false_type_label": "层级错置",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.559,
+      "x_name": "人格障碍",
+      "y_name": "非典型抑郁障碍",
+      "display_relation_label": "上下位",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "非典型抑郁障碍 是下位类型，隶属于 焦虑障碍。",
+        "焦虑障碍 是下位类型，隶属于 非典型抑郁障碍。",
+        "narcissistic 人格障碍 是下位类型，隶属于 人格障碍。"
+      ]
+    },
+    {
+      "sample_id": "false_hierarchy_04",
+      "claim_text": "短视频里有人会说，非典型抑郁障碍 可以被归到 语义性痴呆 这个大类下面。",
+      "relation_group": "disease_disease",
+      "relation_group_label": "疾病-疾病",
+      "false_type": "hierarchy_error",
+      "false_type_label": "层级错置",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.546,
+      "x_name": "语义性痴呆",
+      "y_name": "非典型抑郁障碍",
+      "display_relation_label": "上下位",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "非典型抑郁障碍 是下位类型，隶属于 焦虑障碍。",
+        "焦虑障碍 是下位类型，隶属于 非典型抑郁障碍。",
+        "语义性痴呆 常见表现为 痴呆。"
+      ]
+    },
+    {
+      "sample_id": "false_hierarchy_08",
+      "claim_text": "短视频里有人会说，非典型抑郁障碍 可以被归到 难治性精神分裂症 这个大类下面。",
+      "relation_group": "disease_disease",
+      "relation_group_label": "疾病-疾病",
+      "false_type": "hierarchy_error",
+      "false_type_label": "层级错置",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.536,
+      "x_name": "难治性精神分裂症",
+      "y_name": "非典型抑郁障碍",
+      "display_relation_label": "上下位",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "难治性精神分裂症 是下位类型，隶属于 精神分裂症。",
+        "精神分裂症 是下位类型，隶属于 难治性精神分裂症。",
+        "非典型抑郁障碍 是下位类型，隶属于 焦虑障碍。",
+        "焦虑障碍 是下位类型，隶属于 非典型抑郁障碍。"
+      ]
+    },
+    {
+      "sample_id": "false_hierarchy_07",
+      "claim_text": "短视频里有人会说，非典型抑郁障碍 可以被归到 遗传性痴呆 这个大类下面。",
+      "relation_group": "disease_disease",
+      "relation_group_label": "疾病-疾病",
+      "false_type": "hierarchy_error",
+      "false_type_label": "层级错置",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.518,
+      "x_name": "遗传性痴呆",
+      "y_name": "非典型抑郁障碍",
+      "display_relation_label": "上下位",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "非典型抑郁障碍 是下位类型，隶属于 焦虑障碍。",
+        "焦虑障碍 是下位类型，隶属于 非典型抑郁障碍。",
+        "遗传性痴呆 是下位类型，隶属于 额颞叶痴呆。",
+        "额颞叶痴呆 是下位类型，隶属于 遗传性痴呆。"
+      ]
+    },
+    {
+      "sample_id": "false_hierarchy_03",
+      "claim_text": "短视频里有人会说，非典型抑郁障碍 可以被归到 偏执型精神分裂症 这个大类下面。",
+      "relation_group": "disease_disease",
+      "relation_group_label": "疾病-疾病",
+      "false_type": "hierarchy_error",
+      "false_type_label": "层级错置",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.505,
+      "x_name": "偏执型精神分裂症",
+      "y_name": "非典型抑郁障碍",
+      "display_relation_label": "上下位",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "非典型抑郁障碍 是下位类型，隶属于 焦虑障碍。",
+        "焦虑障碍 是下位类型，隶属于 非典型抑郁障碍。",
+        "Tenofovir 对 偏执型精神分裂症 属于禁忌。"
+      ]
+    },
+    {
+      "sample_id": "false_hierarchy_10",
+      "claim_text": "短视频里有人会说，非典型抑郁障碍 可以被归到 血管性痴呆 这个大类下面。",
+      "relation_group": "disease_disease",
+      "relation_group_label": "疾病-疾病",
+      "false_type": "hierarchy_error",
+      "false_type_label": "层级错置",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.481,
+      "x_name": "血管性痴呆",
+      "y_name": "非典型抑郁障碍",
+      "display_relation_label": "上下位",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "非典型抑郁障碍 是下位类型，隶属于 焦虑障碍。",
+        "焦虑障碍 是下位类型，隶属于 非典型抑郁障碍。",
+        "血管性痴呆 是下位类型，隶属于 multi-infarct dementia。",
+        "multi-infarct dementia 是下位类型，隶属于 血管性痴呆。"
+      ]
+    },
+    {
+      "sample_id": "false_hierarchy_01",
+      "claim_text": "短视频里有人会说，非典型抑郁障碍 可以被归到 伴痴呆的代谢性疾病 这个大类下面。",
+      "relation_group": "disease_disease",
+      "relation_group_label": "疾病-疾病",
+      "false_type": "hierarchy_error",
+      "false_type_label": "层级错置",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.449,
+      "x_name": "伴痴呆的代谢性疾病",
+      "y_name": "非典型抑郁障碍",
+      "display_relation_label": "上下位",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "非典型抑郁障碍 是下位类型，隶属于 焦虑障碍。",
+        "焦虑障碍 是下位类型，隶属于 非典型抑郁障碍。",
+        "伴痴呆的代谢性疾病 是下位类型，隶属于 遗传性痴呆。",
+        "遗传性痴呆 是下位类型，隶属于 伴痴呆的代谢性疾病。"
+      ]
+    },
+    {
+      "sample_id": "false_polarity_03",
+      "claim_text": "有些说法会把 肌炎 讲成 早发佩吉特骨病相关包涵体肌病（可伴额颞叶痴呆） 的典型表现。",
+      "relation_group": "disease_phenotype",
+      "relation_group_label": "疾病-表型",
+      "false_type": "polarity_flip",
+      "false_type_label": "语义反转",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.917,
+      "x_name": "肌炎",
+      "y_name": "早发佩吉特骨病相关包涵体肌病（可伴额颞叶痴呆）",
+      "display_relation_label": "表型缺失",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "早发佩吉特骨病相关包涵体肌病（可伴额颞叶痴呆） 常见表现为 肌炎。",
+        "早发佩吉特骨病相关包涵体肌病（可伴额颞叶痴呆） 常见表现为 额颞叶痴呆。",
+        "早发佩吉特骨病相关包涵体肌病（可伴额颞叶痴呆） 常见表现为 Myopathy。"
+      ]
+    },
+    {
+      "sample_id": "false_polarity_02",
+      "claim_text": "有些说法会把 男性性欲减退 讲成 早发性精神分裂症 的典型表现。",
+      "relation_group": "disease_phenotype",
+      "relation_group_label": "疾病-表型",
+      "false_type": "polarity_flip",
+      "false_type_label": "语义反转",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.901,
+      "x_name": "男性性欲减退",
+      "y_name": "早发性精神分裂症",
+      "display_relation_label": "表型缺失",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "早发性精神分裂症 常见表现为 男性性欲减退。",
+        "早发性精神分裂症 常见表现为 女性性欲减退。",
+        "早发性精神分裂症 常见表现为 焦虑。"
+      ]
+    },
+    {
+      "sample_id": "false_polarity_05",
+      "claim_text": "很多短视频会说，Magnesium salicylate 其实不适合用于 强迫症，甚至属于禁忌。",
+      "relation_group": "disease_drug",
+      "relation_group_label": "疾病-药物",
+      "false_type": "polarity_flip",
+      "false_type_label": "语义反转",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.846,
+      "x_name": "强迫症",
+      "y_name": "Magnesium salicylate",
+      "display_relation_label": "适应症",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "Magnesium salicylate 对 强迫症 属于禁忌。",
+        "Magnesium salicylate 对 焦虑障碍 属于禁忌。",
+        "Magnesium salicylate 对 agoraphobia 属于禁忌。"
+      ]
+    },
+    {
+      "sample_id": "false_polarity_10",
+      "claim_text": "有些博主会说，Citalopram 其实可以放心用于 重度抑郁障碍。",
+      "relation_group": "disease_drug",
+      "relation_group_label": "疾病-药物",
+      "false_type": "polarity_flip",
+      "false_type_label": "语义反转",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.732,
+      "x_name": "重度抑郁障碍",
+      "y_name": "Citalopram",
+      "display_relation_label": "禁忌症",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "Citalopram 可用于 重度抑郁障碍。",
+        "氟西汀 可用于 重度抑郁障碍。",
+        "帕罗西汀 可用于 重度抑郁障碍。"
+      ]
+    },
+    {
+      "sample_id": "false_polarity_09",
+      "claim_text": "有些博主会说，Clopenthixol 其实可以放心用于 分裂情感性障碍。",
+      "relation_group": "disease_drug",
+      "relation_group_label": "疾病-药物",
+      "false_type": "polarity_flip",
+      "false_type_label": "语义反转",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.657,
+      "x_name": "分裂情感性障碍",
+      "y_name": "Clopenthixol",
+      "display_relation_label": "禁忌症",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "Clopenthixol 可用于 分裂情感性障碍。",
+        "Trolnitrate 对 分裂情感性障碍 属于禁忌。"
+      ]
+    },
+    {
+      "sample_id": "false_polarity_01",
+      "claim_text": "网上有人说，瓜德罗普帕金森综合征伴痴呆 一般不会表现出 Lewy bodies。",
+      "relation_group": "disease_phenotype",
+      "relation_group_label": "疾病-表型",
+      "false_type": "polarity_flip",
+      "false_type_label": "语义反转",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.654,
+      "x_name": "瓜德罗普帕金森综合征伴痴呆",
+      "y_name": "Lewy bodies",
+      "display_relation_label": "表型存在",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "瓜德罗普帕金森综合征伴痴呆 常见表现为 痴呆。",
+        "瓜德罗普帕金森综合征伴痴呆 通常不表现为 Lewy bodies。",
+        "瓜德罗普帕金森综合征伴痴呆 常见表现为 Parkinsonism。"
+      ]
+    },
+    {
+      "sample_id": "false_polarity_04",
+      "claim_text": "有些博主会说，Buspirone 其实可以放心用于 焦虑障碍。",
+      "relation_group": "disease_drug",
+      "relation_group_label": "疾病-药物",
+      "false_type": "polarity_flip",
+      "false_type_label": "语义反转",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.644,
+      "x_name": "焦虑障碍",
+      "y_name": "Buspirone",
+      "display_relation_label": "禁忌症",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "Buspirone 可用于 焦虑障碍。",
+        "焦虑障碍 常见表现为 焦虑。",
+        "Trolnitrate 对 焦虑障碍 属于禁忌。"
+      ]
+    },
+    {
+      "sample_id": "false_polarity_07",
+      "claim_text": "有些博主会说，去甲文拉法辛 其实可以放心用于 焦虑障碍。",
+      "relation_group": "disease_drug",
+      "relation_group_label": "疾病-药物",
+      "false_type": "polarity_flip",
+      "false_type_label": "语义反转",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.601,
+      "x_name": "去甲文拉法辛",
+      "y_name": "焦虑障碍",
+      "display_relation_label": "禁忌症",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "去甲文拉法辛 可用于 焦虑障碍。",
+        "去甲文拉法辛 可用于 焦虑障碍 的超说明书场景。",
+        "去甲文拉法辛 对 bipolar disorder 属于禁忌。"
+      ]
+    },
+    {
+      "sample_id": "false_polarity_06",
+      "claim_text": "有些博主会说，丙氯拉嗪 其实可以放心用于 精神分裂症。",
+      "relation_group": "disease_drug",
+      "relation_group_label": "疾病-药物",
+      "false_type": "polarity_flip",
+      "false_type_label": "语义反转",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.593,
+      "x_name": "丙氯拉嗪",
+      "y_name": "精神分裂症",
+      "display_relation_label": "禁忌症",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "丙氯拉嗪 可用于 精神分裂症。",
+        "丙氯拉嗪 对 阿尔茨海默病 属于禁忌。",
+        "早发性精神分裂症 是下位类型，隶属于 精神分裂症。"
+      ]
+    },
+    {
+      "sample_id": "false_polarity_08",
+      "claim_text": "有些博主会说，Chlorpromazine 其实可以放心用于 精神分裂症。",
+      "relation_group": "disease_drug",
+      "relation_group_label": "疾病-药物",
+      "false_type": "polarity_flip",
+      "false_type_label": "语义反转",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.578,
+      "x_name": "精神分裂症",
+      "y_name": "Chlorpromazine",
+      "display_relation_label": "禁忌症",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "Chlorpromazine 可用于 精神分裂症。",
+        "Chlorpromazine 对 阿尔茨海默病 属于禁忌。",
+        "Chlorpromazine 可用于 分裂情感性障碍。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_phenotype_01",
+      "claim_text": "很多科普会说，包涵体肌病-佩吉特骨病-额颞叶痴呆综合征 常见表现之一是 肌萎缩侧索硬化。",
+      "relation_group": "disease_phenotype",
+      "relation_group_label": "疾病-表型",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.928,
+      "x_name": "包涵体肌病-佩吉特骨病-额颞叶痴呆综合征",
+      "y_name": "肌萎缩侧索硬化",
+      "display_relation_label": "表型存在",
+      "note": "已命中精确三元组证据。",
+      "is_correct": true,
+      "evidence": [
+        "包涵体肌病-佩吉特骨病-额颞叶痴呆综合征 常见表现为 肌萎缩侧索硬化。",
+        "包涵体肌病-佩吉特骨病-额颞叶痴呆综合征 常见表现为 痴呆。",
+        "包涵体肌病-佩吉特骨病-额颞叶痴呆综合征 常见表现为 额颞叶痴呆。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_disease_05",
+      "claim_text": "很多资料会把 包涵体肌病-佩吉特骨病-额颞叶痴呆综合征 视为 额颞叶痴呆 的下位类型或更具体的类别。",
+      "relation_group": "disease_disease",
+      "relation_group_label": "疾病-疾病",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.916,
+      "x_name": "额颞叶痴呆",
+      "y_name": "包涵体肌病-佩吉特骨病-额颞叶痴呆综合征",
+      "display_relation_label": "上下位",
+      "note": "语料中存在精确三元组，已通过实体感知回退命中。",
+      "is_correct": true,
+      "evidence": [
+        "包涵体肌病-佩吉特骨病-额颞叶痴呆综合征 常见表现为 额颞叶痴呆。",
+        "包涵体肌病-佩吉特骨病-额颞叶痴呆综合征 常见表现为 痴呆。",
+        "包涵体肌病-佩吉特骨病-额颞叶痴呆综合征 常见表现为 Myopathy。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_phenotype_03",
+      "claim_text": "很多科普会说，包涵体肌病-佩吉特骨病-额颞叶痴呆综合征 常见表现之一是 脑萎缩。",
+      "relation_group": "disease_phenotype",
+      "relation_group_label": "疾病-表型",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.907,
+      "x_name": "脑萎缩",
+      "y_name": "包涵体肌病-佩吉特骨病-额颞叶痴呆综合征",
+      "display_relation_label": "表型存在",
+      "note": "已命中精确三元组证据。",
+      "is_correct": true,
+      "evidence": [
+        "包涵体肌病-佩吉特骨病-额颞叶痴呆综合征 常见表现为 脑萎缩。",
+        "包涵体肌病-佩吉特骨病-额颞叶痴呆综合征 常见表现为 痴呆。",
+        "包涵体肌病-佩吉特骨病-额颞叶痴呆综合征 常见表现为 额颞叶痴呆。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_phenotype_08",
+      "claim_text": "很多科普会说，行为变异型额颞叶痴呆 常见表现之一是 Aggressive behavior。",
+      "relation_group": "disease_phenotype",
+      "relation_group_label": "疾病-表型",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.867,
+      "x_name": "行为变异型额颞叶痴呆",
+      "y_name": "Aggressive behavior",
+      "display_relation_label": "表型存在",
+      "note": "已命中精确三元组证据。",
+      "is_correct": true,
+      "evidence": [
+        "行为变异型额颞叶痴呆 常见表现为 Aggressive behavior。",
+        "行为变异型额颞叶痴呆 常见表现为 额颞叶痴呆。",
+        "行为变异型额颞叶痴呆 常见表现为 Inappropriate behavior。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_phenotype_07",
+      "claim_text": "很多科普会说，伴运动神经元病的额颞叶痴呆 常见表现之一是 抑郁性情绪。",
+      "relation_group": "disease_phenotype",
+      "relation_group_label": "疾病-表型",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.844,
+      "x_name": "伴运动神经元病的额颞叶痴呆",
+      "y_name": "抑郁性情绪",
+      "display_relation_label": "表型存在",
+      "note": "已命中精确三元组证据。",
+      "is_correct": true,
+      "evidence": [
+        "伴运动神经元病的额颞叶痴呆 常见表现为 抑郁性情绪。",
+        "伴运动神经元病的额颞叶痴呆 常见表现为 额颞叶痴呆。",
+        "伴运动神经元病的额颞叶痴呆 常见表现为 Parkinsonism。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_drug_06",
+      "claim_text": "很多科普会提醒，炔诺二醇醋酸酯 对 焦虑障碍 属于禁忌或不推荐。",
+      "relation_group": "disease_drug",
+      "relation_group_label": "疾病-药物",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.836,
+      "x_name": "炔诺二醇醋酸酯",
+      "y_name": "焦虑障碍",
+      "display_relation_label": "禁忌症",
+      "note": "已命中精确三元组证据。",
+      "is_correct": true,
+      "evidence": [
+        "炔诺二醇醋酸酯 对 焦虑障碍 属于禁忌。",
+        "焦虑障碍 常见表现为 焦虑。",
+        "Trolnitrate 对 焦虑障碍 属于禁忌。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_drug_07",
+      "claim_text": "很多科普会提醒，炔诺二醇醋酸酯 对 焦虑障碍 属于禁忌或不推荐。",
+      "relation_group": "disease_drug",
+      "relation_group_label": "疾病-药物",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.836,
+      "x_name": "焦虑障碍",
+      "y_name": "炔诺二醇醋酸酯",
+      "display_relation_label": "禁忌症",
+      "note": "已命中精确三元组证据。",
+      "is_correct": true,
+      "evidence": [
+        "炔诺二醇醋酸酯 对 焦虑障碍 属于禁忌。",
+        "焦虑障碍 常见表现为 焦虑。",
+        "Trolnitrate 对 焦虑障碍 属于禁忌。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_phenotype_06",
+      "claim_text": "很多科普会说，瓜德罗普帕金森综合征伴痴呆 常见表现之一是 幻觉。",
+      "relation_group": "disease_phenotype",
+      "relation_group_label": "疾病-表型",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.83,
+      "x_name": "幻觉",
+      "y_name": "瓜德罗普帕金森综合征伴痴呆",
+      "display_relation_label": "表型存在",
+      "note": "已命中精确三元组证据。",
+      "is_correct": true,
+      "evidence": [
+        "瓜德罗普帕金森综合征伴痴呆 常见表现为 幻觉。",
+        "瓜德罗普帕金森综合征伴痴呆 常见表现为 痴呆。",
+        "瓜德罗普帕金森综合征伴痴呆 常见表现为 Parkinsonism。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_phenotype_04",
+      "claim_text": "很多科普会说，瓜德罗普帕金森综合征伴痴呆 常见表现之一是 肌强直。",
+      "relation_group": "disease_phenotype",
+      "relation_group_label": "疾病-表型",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.82,
+      "x_name": "肌强直",
+      "y_name": "瓜德罗普帕金森综合征伴痴呆",
+      "display_relation_label": "表型存在",
+      "note": "已命中精确三元组证据。",
+      "is_correct": true,
+      "evidence": [
+        "瓜德罗普帕金森综合征伴痴呆 常见表现为 肌强直。",
+        "瓜德罗普帕金森综合征伴痴呆 常见表现为 痴呆。",
+        "瓜德罗普帕金森综合征伴痴呆 常见表现为 Parkinsonism。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_disease_01",
+      "claim_text": "很多资料会把 脑脂质沉积症伴痴呆 视为 伴痴呆的代谢性疾病 的下位类型或更具体的类别。",
+      "relation_group": "disease_disease",
+      "relation_group_label": "疾病-疾病",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.799,
+      "x_name": "伴痴呆的代谢性疾病",
+      "y_name": "脑脂质沉积症伴痴呆",
+      "display_relation_label": "上下位",
+      "note": "已命中精确三元组证据。",
+      "is_correct": true,
+      "evidence": [
+        "脑脂质沉积症伴痴呆 是下位类型，隶属于 伴痴呆的代谢性疾病。",
+        "伴痴呆的代谢性疾病 是下位类型，隶属于 脑脂质沉积症伴痴呆。",
+        "伴痴呆的代谢性疾病 是下位类型，隶属于 遗传性痴呆。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_disease_09",
+      "claim_text": "很多资料会把 avoidant 人格障碍 视为 人格障碍 的下位类型或更具体的类别。",
+      "relation_group": "disease_disease",
+      "relation_group_label": "疾病-疾病",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.771,
+      "x_name": "人格障碍",
+      "y_name": "avoidant 人格障碍",
+      "display_relation_label": "上下位",
+      "note": "已命中精确三元组证据。",
+      "is_correct": true,
+      "evidence": [
+        "avoidant 人格障碍 是下位类型，隶属于 人格障碍。",
+        "人格障碍 是下位类型，隶属于 avoidant 人格障碍。",
+        "narcissistic 人格障碍 是下位类型，隶属于 人格障碍。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_phenotype_10",
+      "claim_text": "很多科普会说，早发性精神分裂症 常见表现之一是 躁狂。",
+      "relation_group": "disease_phenotype",
+      "relation_group_label": "疾病-表型",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.767,
+      "x_name": "躁狂",
+      "y_name": "早发性精神分裂症",
+      "display_relation_label": "表型存在",
+      "note": "已命中精确三元组证据。",
+      "is_correct": true,
+      "evidence": [
+        "早发性精神分裂症 常见表现为 躁狂。",
+        "早发性精神分裂症 常见表现为 焦虑。",
+        "早发性精神分裂症 常见表现为 幻觉。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_disease_10",
+      "claim_text": "很多资料会把 multi-infarct dementia 视为 血管性痴呆 的下位类型或更具体的类别。",
+      "relation_group": "disease_disease",
+      "relation_group_label": "疾病-疾病",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.762,
+      "x_name": "血管性痴呆",
+      "y_name": "multi-infarct dementia",
+      "display_relation_label": "上下位",
+      "note": "已命中精确三元组证据。",
+      "is_correct": true,
+      "evidence": [
+        "multi-infarct dementia 是下位类型，隶属于 血管性痴呆。",
+        "血管性痴呆 是下位类型，隶属于 multi-infarct dementia。",
+        "语义性痴呆 常见表现为 痴呆。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_drug_05",
+      "claim_text": "有些内容会说，Imipramine 有时会被用于 注意缺陷多动障碍·注意缺陷型 的非标准适应证场景。",
+      "relation_group": "disease_drug",
+      "relation_group_label": "疾病-药物",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.755,
+      "x_name": "注意缺陷多动障碍·注意缺陷型",
+      "y_name": "Imipramine",
+      "display_relation_label": "超说明书用药",
+      "note": "已命中精确三元组证据。",
+      "is_correct": true,
+      "evidence": [
+        "Imipramine 可用于 注意缺陷多动障碍·注意缺陷型 的超说明书场景。",
+        "注意缺陷多动障碍（ADHD） 是下位类型，隶属于 注意缺陷多动障碍·注意缺陷型。",
+        "Zolpidem 对 注意缺陷多动障碍·注意缺陷型 属于禁忌。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_phenotype_09",
+      "claim_text": "很多科普会说，语义性痴呆 常见表现之一是 Heterogeneous。",
+      "relation_group": "disease_phenotype",
+      "relation_group_label": "疾病-表型",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.744,
+      "x_name": "语义性痴呆",
+      "y_name": "Heterogeneous",
+      "display_relation_label": "表型存在",
+      "note": "已命中精确三元组证据。",
+      "is_correct": true,
+      "evidence": [
+        "语义性痴呆 常见表现为 Heterogeneous。",
+        "语义性痴呆 常见表现为 痴呆。",
+        "语义性痴呆 常见表现为 额颞叶痴呆。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_phenotype_05",
+      "claim_text": "很多科普会说，语义性痴呆 常见表现之一是 失读症。",
+      "relation_group": "disease_phenotype",
+      "relation_group_label": "疾病-表型",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.742,
+      "x_name": "失读症",
+      "y_name": "语义性痴呆",
+      "display_relation_label": "表型存在",
+      "note": "已命中精确三元组证据。",
+      "is_correct": true,
+      "evidence": [
+        "语义性痴呆 常见表现为 失读症。",
+        "语义性痴呆 常见表现为 痴呆。",
+        "语义性痴呆 常见表现为 额颞叶痴呆。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_disease_04",
+      "claim_text": "很多资料会把 行为变异型额颞叶痴呆 视为 语义性痴呆 的下位类型或更具体的类别。",
+      "relation_group": "disease_disease",
+      "relation_group_label": "疾病-疾病",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.735,
+      "x_name": "语义性痴呆",
+      "y_name": "行为变异型额颞叶痴呆",
+      "display_relation_label": "上下位",
+      "note": "已命中精确三元组证据。",
+      "is_correct": true,
+      "evidence": [
+        "行为变异型额颞叶痴呆 常见表现为 额颞叶痴呆。",
+        "行为变异型额颞叶痴呆 是下位类型，隶属于 语义性痴呆。",
+        "语义性痴呆 是下位类型，隶属于 行为变异型额颞叶痴呆。",
+        "行为变异型额颞叶痴呆 常见表现为 行为异常。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_phenotype_02",
+      "claim_text": "很多科普会说，早发性精神分裂症 常见表现之一是 焦虑。",
+      "relation_group": "disease_phenotype",
+      "relation_group_label": "疾病-表型",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.726,
+      "x_name": "早发性精神分裂症",
+      "y_name": "焦虑",
+      "display_relation_label": "表型存在",
+      "note": "已命中精确三元组证据。",
+      "is_correct": true,
+      "evidence": [
+        "早发性精神分裂症 常见表现为 焦虑。",
+        "早发性精神分裂症 常见表现为 幻觉。",
+        "早发性精神分裂症 常见表现为 抑郁性情绪。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_disease_07",
+      "claim_text": "很多资料会把 伴痴呆的代谢性疾病 视为 遗传性痴呆 的下位类型或更具体的类别。",
+      "relation_group": "disease_disease",
+      "relation_group_label": "疾病-疾病",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.715,
+      "x_name": "遗传性痴呆",
+      "y_name": "伴痴呆的代谢性疾病",
+      "display_relation_label": "上下位",
+      "note": "已命中精确三元组证据。",
+      "is_correct": true,
+      "evidence": [
+        "伴痴呆的代谢性疾病 是下位类型，隶属于 遗传性痴呆。",
+        "遗传性痴呆 是下位类型，隶属于 伴痴呆的代谢性疾病。",
+        "脑脂质沉积症伴痴呆 是下位类型，隶属于 伴痴呆的代谢性疾病。",
+        "伴痴呆的代谢性疾病 是下位类型，隶属于 脑脂质沉积症伴痴呆。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_disease_08",
+      "claim_text": "很多资料会把 精神分裂症 视为 难治性精神分裂症 的下位类型或更具体的类别。",
+      "relation_group": "disease_disease",
+      "relation_group_label": "疾病-疾病",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.709,
+      "x_name": "难治性精神分裂症",
+      "y_name": "精神分裂症",
+      "display_relation_label": "上下位",
+      "note": "已命中精确三元组证据。",
+      "is_correct": true,
+      "evidence": [
+        "难治性精神分裂症 是下位类型，隶属于 精神分裂症。",
+        "精神分裂症 是下位类型，隶属于 难治性精神分裂症。",
+        "早发性精神分裂症 是下位类型，隶属于 精神分裂症。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_drug_10",
+      "claim_text": "很多科普会提醒，双硫仑 对 分裂情感性障碍 属于禁忌或不推荐。",
+      "relation_group": "disease_drug",
+      "relation_group_label": "疾病-药物",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.706,
+      "x_name": "双硫仑",
+      "y_name": "分裂情感性障碍",
+      "display_relation_label": "禁忌症",
+      "note": "已命中精确三元组证据。",
+      "is_correct": true,
+      "evidence": [
+        "双硫仑 对 分裂情感性障碍 属于禁忌。",
+        "Trolnitrate 对 分裂情感性障碍 属于禁忌。",
+        "Bupropion 对 分裂情感性障碍 属于禁忌。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_drug_09",
+      "claim_text": "很多科普会提醒，Chlorphentermine 对 分裂情感性障碍 属于禁忌或不推荐。",
+      "relation_group": "disease_drug",
+      "relation_group_label": "疾病-药物",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.706,
+      "x_name": "Chlorphentermine",
+      "y_name": "分裂情感性障碍",
+      "display_relation_label": "禁忌症",
+      "note": "已命中精确三元组证据。",
+      "is_correct": true,
+      "evidence": [
+        "Chlorphentermine 对 分裂情感性障碍 属于禁忌。",
+        "Trolnitrate 对 分裂情感性障碍 属于禁忌。",
+        "Bupropion 对 分裂情感性障碍 属于禁忌。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_drug_02",
+      "claim_text": "很多科普会提醒，Dronabinol 对 焦虑障碍 属于禁忌或不推荐。",
+      "relation_group": "disease_drug",
+      "relation_group_label": "疾病-药物",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.685,
+      "x_name": "焦虑障碍",
+      "y_name": "Dronabinol",
+      "display_relation_label": "禁忌症",
+      "note": "已命中精确三元组证据。",
+      "is_correct": true,
+      "evidence": [
+        "Dronabinol 对 焦虑障碍 属于禁忌。",
+        "Dronabinol 对 bipolar disorder 属于禁忌。",
+        "Dronabinol 对 精神分裂症 属于禁忌。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_drug_01",
+      "claim_text": "很多科普会提醒，Dextropropoxyphene 对 焦虑障碍 属于禁忌或不推荐。",
+      "relation_group": "disease_drug",
+      "relation_group_label": "疾病-药物",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.684,
+      "x_name": "焦虑障碍",
+      "y_name": "Dextropropoxyphene",
+      "display_relation_label": "禁忌症",
+      "note": "已命中精确三元组证据。",
+      "is_correct": true,
+      "evidence": [
+        "Dextropropoxyphene 对 焦虑障碍 属于禁忌。",
+        "Dextropropoxyphene 对 阿尔茨海默病 属于禁忌。",
+        "Dextropropoxyphene 对 agoraphobia 属于禁忌。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_drug_04",
+      "claim_text": "很多科普会说，普拉西坦 可以用于 阿尔茨海默病。",
+      "relation_group": "disease_drug",
+      "relation_group_label": "疾病-药物",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.647,
+      "x_name": "普拉西坦",
+      "y_name": "阿尔茨海默病",
+      "display_relation_label": "适应症",
+      "note": "已命中精确三元组证据。",
+      "is_correct": true,
+      "evidence": [
+        "普拉西坦 可用于 阿尔茨海默病。",
+        "阿尔茨海默病 常见表现为 痴呆。",
+        "familial 阿尔茨海默病 是下位类型，隶属于 阿尔茨海默病。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_drug_08",
+      "claim_text": "很多科普会说，司替普汀 可以用于 焦虑障碍。",
+      "relation_group": "disease_drug",
+      "relation_group_label": "疾病-药物",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.644,
+      "x_name": "司替普汀",
+      "y_name": "焦虑障碍",
+      "display_relation_label": "适应症",
+      "note": "已命中精确三元组证据。",
+      "is_correct": true,
+      "evidence": [
+        "司替普汀 可用于 焦虑障碍。",
+        "焦虑障碍 常见表现为 焦虑。",
+        "Trolnitrate 对 焦虑障碍 属于禁忌。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_disease_06",
+      "claim_text": "很多资料会把 内源性抑郁 视为 重度抑郁障碍 的下位类型或更具体的类别。",
+      "relation_group": "disease_disease",
+      "relation_group_label": "疾病-疾病",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.623,
+      "x_name": "重度抑郁障碍",
+      "y_name": "内源性抑郁",
+      "display_relation_label": "上下位",
+      "note": "已命中精确三元组证据。",
+      "is_correct": true,
+      "evidence": [
+        "重度抑郁障碍 是下位类型，隶属于 内源性抑郁。",
+        "内源性抑郁 是下位类型，隶属于 重度抑郁障碍。",
+        "氟西汀 可用于 重度抑郁障碍。",
+        "帕罗西汀 可用于 重度抑郁障碍。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_drug_03",
+      "claim_text": "有些内容会说，氯胺酮 有时会被用于 unipolar depression 的非标准适应证场景。",
+      "relation_group": "disease_drug",
+      "relation_group_label": "疾病-药物",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.596,
+      "x_name": "氯胺酮",
+      "y_name": "unipolar depression",
+      "display_relation_label": "超说明书用药",
+      "note": "已命中精确三元组证据。",
+      "is_correct": true,
+      "evidence": [
+        "氯胺酮 可用于 unipolar depression 的超说明书场景。",
+        "氟西汀 可用于 unipolar depression。",
+        "帕罗西汀 可用于 unipolar depression。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_disease_02",
+      "claim_text": "很多资料会把 postpartum depression 视为 焦虑障碍 的下位类型或更具体的类别。",
+      "relation_group": "disease_disease",
+      "relation_group_label": "疾病-疾病",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.585,
+      "x_name": "焦虑障碍",
+      "y_name": "postpartum depression",
+      "display_relation_label": "上下位",
+      "note": "已命中精确三元组证据。",
+      "is_correct": true,
+      "evidence": [
+        "postpartum depression 是下位类型，隶属于 焦虑障碍。",
+        "焦虑障碍 是下位类型，隶属于 postpartum depression。",
+        "Brexanolone 可用于 postpartum depression。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_disease_03",
+      "claim_text": "很多资料会把 精神分裂症 视为 偏执型精神分裂症 的下位类型或更具体的类别。",
+      "relation_group": "disease_disease",
+      "relation_group_label": "疾病-疾病",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.574,
+      "x_name": "偏执型精神分裂症",
+      "y_name": "精神分裂症",
+      "display_relation_label": "上下位",
+      "note": "已命中精确三元组证据。",
+      "is_correct": true,
+      "evidence": [
+        "Tenofovir 对 偏执型精神分裂症 属于禁忌。",
+        "偏执型精神分裂症 是下位类型，隶属于 精神分裂症。",
+        "精神分裂症 是下位类型，隶属于 偏执型精神分裂症。",
+        "Emtricitabine 对 偏执型精神分裂症 属于禁忌。"
+      ]
+    }
+  ],
+  "featured_claims": [
+    {
+      "sample_id": "real_disease_drug_06",
+      "claim_text": "很多科普会提醒，炔诺二醇醋酸酯 对 焦虑障碍 属于禁忌或不推荐。",
+      "relation_group": "disease_drug",
+      "relation_group_label": "疾病-药物",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.836,
+      "x_name": "炔诺二醇醋酸酯",
+      "y_name": "焦虑障碍",
+      "display_relation_label": "禁忌症",
+      "note": "已命中精确三元组证据。",
+      "is_correct": true,
+      "evidence": [
+        "炔诺二醇醋酸酯 对 焦虑障碍 属于禁忌。",
+        "焦虑障碍 常见表现为 焦虑。",
+        "Trolnitrate 对 焦虑障碍 属于禁忌。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_drug_07",
+      "claim_text": "很多科普会提醒，炔诺二醇醋酸酯 对 焦虑障碍 属于禁忌或不推荐。",
+      "relation_group": "disease_drug",
+      "relation_group_label": "疾病-药物",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.836,
+      "x_name": "焦虑障碍",
+      "y_name": "炔诺二醇醋酸酯",
+      "display_relation_label": "禁忌症",
+      "note": "已命中精确三元组证据。",
+      "is_correct": true,
+      "evidence": [
+        "炔诺二醇醋酸酯 对 焦虑障碍 属于禁忌。",
+        "焦虑障碍 常见表现为 焦虑。",
+        "Trolnitrate 对 焦虑障碍 属于禁忌。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_phenotype_01",
+      "claim_text": "很多科普会说，包涵体肌病-佩吉特骨病-额颞叶痴呆综合征 常见表现之一是 肌萎缩侧索硬化。",
+      "relation_group": "disease_phenotype",
+      "relation_group_label": "疾病-表型",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.928,
+      "x_name": "包涵体肌病-佩吉特骨病-额颞叶痴呆综合征",
+      "y_name": "肌萎缩侧索硬化",
+      "display_relation_label": "表型存在",
+      "note": "已命中精确三元组证据。",
+      "is_correct": true,
+      "evidence": [
+        "包涵体肌病-佩吉特骨病-额颞叶痴呆综合征 常见表现为 肌萎缩侧索硬化。",
+        "包涵体肌病-佩吉特骨病-额颞叶痴呆综合征 常见表现为 痴呆。",
+        "包涵体肌病-佩吉特骨病-额颞叶痴呆综合征 常见表现为 额颞叶痴呆。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_phenotype_03",
+      "claim_text": "很多科普会说，包涵体肌病-佩吉特骨病-额颞叶痴呆综合征 常见表现之一是 脑萎缩。",
+      "relation_group": "disease_phenotype",
+      "relation_group_label": "疾病-表型",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.907,
+      "x_name": "脑萎缩",
+      "y_name": "包涵体肌病-佩吉特骨病-额颞叶痴呆综合征",
+      "display_relation_label": "表型存在",
+      "note": "已命中精确三元组证据。",
+      "is_correct": true,
+      "evidence": [
+        "包涵体肌病-佩吉特骨病-额颞叶痴呆综合征 常见表现为 脑萎缩。",
+        "包涵体肌病-佩吉特骨病-额颞叶痴呆综合征 常见表现为 痴呆。",
+        "包涵体肌病-佩吉特骨病-额颞叶痴呆综合征 常见表现为 额颞叶痴呆。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_disease_05",
+      "claim_text": "很多资料会把 包涵体肌病-佩吉特骨病-额颞叶痴呆综合征 视为 额颞叶痴呆 的下位类型或更具体的类别。",
+      "relation_group": "disease_disease",
+      "relation_group_label": "疾病-疾病",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.916,
+      "x_name": "额颞叶痴呆",
+      "y_name": "包涵体肌病-佩吉特骨病-额颞叶痴呆综合征",
+      "display_relation_label": "上下位",
+      "note": "语料中存在精确三元组，已通过实体感知回退命中。",
+      "is_correct": true,
+      "evidence": [
+        "包涵体肌病-佩吉特骨病-额颞叶痴呆综合征 常见表现为 额颞叶痴呆。",
+        "包涵体肌病-佩吉特骨病-额颞叶痴呆综合征 常见表现为 痴呆。",
+        "包涵体肌病-佩吉特骨病-额颞叶痴呆综合征 常见表现为 Myopathy。"
+      ]
+    },
+    {
+      "sample_id": "real_disease_disease_01",
+      "claim_text": "很多资料会把 脑脂质沉积症伴痴呆 视为 伴痴呆的代谢性疾病 的下位类型或更具体的类别。",
+      "relation_group": "disease_disease",
+      "relation_group_label": "疾病-疾病",
+      "false_type": "real",
+      "false_type_label": "真实声明",
+      "predicted_label": "supported",
+      "predicted_label_text": "支持",
+      "top_score": 0.799,
+      "x_name": "伴痴呆的代谢性疾病",
+      "y_name": "脑脂质沉积症伴痴呆",
+      "display_relation_label": "上下位",
+      "note": "已命中精确三元组证据。",
+      "is_correct": true,
+      "evidence": [
+        "脑脂质沉积症伴痴呆 是下位类型，隶属于 伴痴呆的代谢性疾病。",
+        "伴痴呆的代谢性疾病 是下位类型，隶属于 脑脂质沉积症伴痴呆。",
+        "伴痴呆的代谢性疾病 是下位类型，隶属于 遗传性痴呆。"
+      ]
+    },
+    {
+      "sample_id": "false_fabricated_10",
+      "claim_text": "很多科普会说，注意缺陷多动障碍（ADHD） 常见表现之一是 β-淀粉样蛋白免疫反应沉积。",
+      "relation_group": "disease_phenotype",
+      "relation_group_label": "疾病-表型",
+      "false_type": "fabricated",
+      "false_type_label": "凭空编造",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.834,
+      "x_name": "β-淀粉样蛋白免疫反应沉积",
+      "y_name": "注意缺陷多动障碍（ADHD）",
+      "display_relation_label": "表型存在",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "阿尔茨海默病 常见表现为 β-淀粉样蛋白免疫反应沉积。",
+        "注意缺陷多动障碍（ADHD） 常见表现为 注意缺陷多动障碍。",
+        "注意缺陷多动障碍（ADHD） 是下位类型，隶属于 注意缺陷多动障碍·注意缺陷型。"
+      ]
+    },
+    {
+      "sample_id": "false_fabricated_01",
+      "claim_text": "很多科普会提醒，丙戊酸 对 分裂情感性障碍 属于禁忌或不推荐。",
+      "relation_group": "disease_drug",
+      "relation_group_label": "疾病-药物",
+      "false_type": "fabricated",
+      "false_type_label": "凭空编造",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.72,
+      "x_name": "分裂情感性障碍",
+      "y_name": "丙戊酸",
+      "display_relation_label": "禁忌症",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "丙戊酸 对 焦虑障碍 属于禁忌。",
+        "丙戊酸 可用于 bipolar disorder 的超说明书场景。",
+        "丙戊酸 可用于 manic bipolar affective disorder。"
+      ]
+    },
+    {
+      "sample_id": "false_polarity_03",
+      "claim_text": "有些说法会把 肌炎 讲成 早发佩吉特骨病相关包涵体肌病（可伴额颞叶痴呆） 的典型表现。",
+      "relation_group": "disease_phenotype",
+      "relation_group_label": "疾病-表型",
+      "false_type": "polarity_flip",
+      "false_type_label": "语义反转",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.917,
+      "x_name": "肌炎",
+      "y_name": "早发佩吉特骨病相关包涵体肌病（可伴额颞叶痴呆）",
+      "display_relation_label": "表型缺失",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "早发佩吉特骨病相关包涵体肌病（可伴额颞叶痴呆） 常见表现为 肌炎。",
+        "早发佩吉特骨病相关包涵体肌病（可伴额颞叶痴呆） 常见表现为 额颞叶痴呆。",
+        "早发佩吉特骨病相关包涵体肌病（可伴额颞叶痴呆） 常见表现为 Myopathy。"
+      ]
+    },
+    {
+      "sample_id": "false_polarity_02",
+      "claim_text": "有些说法会把 男性性欲减退 讲成 早发性精神分裂症 的典型表现。",
+      "relation_group": "disease_phenotype",
+      "relation_group_label": "疾病-表型",
+      "false_type": "polarity_flip",
+      "false_type_label": "语义反转",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.901,
+      "x_name": "男性性欲减退",
+      "y_name": "早发性精神分裂症",
+      "display_relation_label": "表型缺失",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "早发性精神分裂症 常见表现为 男性性欲减退。",
+        "早发性精神分裂症 常见表现为 女性性欲减退。",
+        "早发性精神分裂症 常见表现为 焦虑。"
+      ]
+    },
+    {
+      "sample_id": "false_hierarchy_02",
+      "claim_text": "短视频里有人会说，脑脂质沉积症伴痴呆 可以被归到 焦虑障碍 这个大类下面。",
+      "relation_group": "disease_disease",
+      "relation_group_label": "疾病-疾病",
+      "false_type": "hierarchy_error",
+      "false_type_label": "层级错置",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.622,
+      "x_name": "焦虑障碍",
+      "y_name": "脑脂质沉积症伴痴呆",
+      "display_relation_label": "上下位",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "脑脂质沉积症伴痴呆 是下位类型，隶属于 伴痴呆的代谢性疾病。",
+        "伴痴呆的代谢性疾病 是下位类型，隶属于 脑脂质沉积症伴痴呆。",
+        "瓜德罗普帕金森综合征伴痴呆 常见表现为 痴呆。"
+      ]
+    },
+    {
+      "sample_id": "false_hierarchy_05",
+      "claim_text": "短视频里有人会说，非典型抑郁障碍 可以被归到 额颞叶痴呆 这个大类下面。",
+      "relation_group": "disease_disease",
+      "relation_group_label": "疾病-疾病",
+      "false_type": "hierarchy_error",
+      "false_type_label": "层级错置",
+      "predicted_label": "unsupported",
+      "predicted_label_text": "不支持",
+      "top_score": 0.587,
+      "x_name": "额颞叶痴呆",
+      "y_name": "非典型抑郁障碍",
+      "display_relation_label": "上下位",
+      "note": "当前 PrimeKG 子图中不存在该精确三元组。",
+      "is_correct": true,
+      "evidence": [
+        "非典型抑郁障碍 是下位类型，隶属于 焦虑障碍。",
+        "焦虑障碍 是下位类型，隶属于 非典型抑郁障碍。",
+        "行为变异型额颞叶痴呆 常见表现为 额颞叶痴呆。"
+      ]
+    }
+  ],
+  "false_corpus_examples": [
+    {
+      "id": 4,
+      "category": "抑郁症",
+      "label": "轻度夸大",
+      "label_full": "轻度夸大",
+      "text": "抑郁症患者一定会有自杀念头"
+    },
+    {
+      "id": 5,
+      "category": "抑郁症",
+      "label": "因果颠倒",
+      "label_full": "因果颠倒",
+      "text": "抑郁症是因为体内血清素完全缺失导致的，补充血清素就能根治"
+    },
+    {
+      "id": 6,
+      "category": "抑郁症",
+      "label": "完全编造",
+      "label_full": "完全编造",
+      "text": "抑郁症患者不能吃辛辣食物，否则会加重病情"
+    },
+    {
+      "id": 7,
+      "category": "抑郁症",
+      "label": "完全编造",
+      "label_full": "完全编造",
+      "text": "抑郁症和缺乏维生素D没有任何关系（此为图谱中未明确覆盖，若图谱无该边则应判定为\"无相关记录\"而非编造，注意区分）"
+    },
+    {
+      "id": 11,
+      "category": "焦虑障碍",
+      "label": "轻度夸大",
+      "label_full": "轻度夸大",
+      "text": "只要心跳加快就说明你有焦虑障碍"
+    },
+    {
+      "id": 12,
+      "category": "焦虑障碍",
+      "label": "因果颠倒",
+      "label_full": "因果颠倒",
+      "text": "焦虑障碍是因为咖啡因摄入过多导致的，戒咖啡就能痊愈"
+    },
+    {
+      "id": 13,
+      "category": "焦虑障碍",
+      "label": "完全编造",
+      "label_full": "完全编造",
+      "text": "焦虑障碍患者必须终身服药，一旦停药就会复发到更严重程度"
+    },
+    {
+      "id": 14,
+      "category": "焦虑障碍",
+      "label": "完全编造",
+      "label_full": "完全编造",
+      "text": "社交焦虑障碍和内向性格本质上是同一种疾病"
+    },
+    {
+      "id": 18,
+      "category": "PTSD",
+      "label": "轻度夸大",
+      "label_full": "轻度夸大",
+      "text": "经历过创伤事件的人一定会得PTSD"
+    },
+    {
+      "id": 19,
+      "category": "PTSD",
+      "label": "因果颠倒",
+      "label_full": "因果颠倒",
+      "text": "PTSD患者一提起创伤事件就会立刻复发，所以永远不能让他们回忆"
+    },
+    {
+      "id": 20,
+      "category": "PTSD",
+      "label": "完全编造",
+      "label_full": "完全编造",
+      "text": "PTSD可以通过抗生素治疗"
+    },
+    {
+      "id": 21,
+      "category": "PTSD",
+      "label": "完全编造",
+      "label_full": "完全编造",
+      "text": "PTSD只发生在退伍军人身上"
+    },
+    {
+      "id": 25,
+      "category": "精神分裂症",
+      "label": "轻度夸大",
+      "label_full": "轻度夸大",
+      "text": "精神分裂症就是人格分裂"
+    },
+    {
+      "id": 26,
+      "category": "精神分裂症",
+      "label": "因果颠倒",
+      "label_full": "因果颠倒",
+      "text": "精神分裂症是因为小时候受到的惊吓太多导致的"
+    },
+    {
+      "id": 27,
+      "category": "精神分裂症",
+      "label": "完全编造",
+      "label_full": "完全编造",
+      "text": "精神分裂症患者都有暴力倾向"
+    },
+    {
+      "id": 28,
+      "category": "精神分裂症",
+      "label": "完全编造",
+      "label_full": "完全编造",
+      "text": "精神分裂症可以通过抗精神病药物根治，痊愈后无需再服药"
+    },
+    {
+      "id": 32,
+      "category": "ADHD",
+      "label": "轻度夸大",
+      "label_full": "轻度夸大",
+      "text": "ADHD的人一定学习成绩差"
+    },
+    {
+      "id": 33,
+      "category": "ADHD",
+      "label": "因果颠倒",
+      "label_full": "因果颠倒",
+      "text": "ADHD是因为电子产品用多了导致的"
+    },
+    {
+      "id": 34,
+      "category": "ADHD",
+      "label": "完全编造",
+      "label_full": "完全编造",
+      "text": "ADHD患者晚上必须吃褪黑素才能入睡，否则症状会恶化"
+    },
+    {
+      "id": 35,
+      "category": "ADHD",
+      "label": "完全编造",
+      "label_full": "完全编造",
+      "text": "ADHD只发生在儿童身上，成年后会自动消失"
+    },
+    {
+      "id": 36,
+      "category": "ADHD",
+      "label": "完全编造",
+      "label_full": "完全编造",
+      "text": "报复性熬夜就是ADHD的诊断标准之一"
+    },
+    {
+      "id": 40,
+      "category": "双相情感障碍",
+      "label": "轻度夸大",
+      "label_full": "轻度夸大",
+      "text": "情绪起伏大就是双相情感障碍"
+    },
+    {
+      "id": 41,
+      "category": "双相情感障碍",
+      "label": "因果颠倒",
+      "label_full": "因果颠倒",
+      "text": "双相情感障碍是因为性格太极端导致的"
+    },
+    {
+      "id": 42,
+      "category": "双相情感障碍",
+      "label": "完全编造",
+      "label_full": "完全编造",
+      "text": "双相情感障碍患者在躁狂期智商会显著提高"
+    },
+    {
+      "id": 43,
+      "category": "双相情感障碍",
+      "label": "完全编造",
+      "label_full": "完全编造",
+      "text": "双相情感障碍可以完全通过冥想治愈，无需药物"
+    },
+    {
+      "id": 46,
+      "category": "跨障碍/共病类（用于测试多跳推理与语义鸿沟）",
+      "label": "语义鸿沟",
+      "label_full": "语义鸿沟",
+      "text": "精神内耗是一种脑子转不动的表现（口语热词，图谱中无对应术语）"
+    },
+    {
+      "id": 47,
+      "category": "跨障碍/共病类（用于测试多跳推理与语义鸿沟）",
+      "label": "语义鸿沟",
+      "label_full": "语义鸿沟",
+      "text": "emo了是不是就是抑郁症发作（口语热词，图谱中无对应术语）"
+    },
+    {
+      "id": 48,
+      "category": "跨障碍/共病类（用于测试多跳推理与语义鸿沟）",
+      "label": "否定性问题",
+      "label_full": "否定性问题",
+      "text": "抑郁症和ADHD之间不存在任何关系（用于测试RAG对\"不存在\"类问题的处理）"
+    },
+    {
+      "id": 49,
+      "category": "跨障碍/共病类（用于测试多跳推理与语义鸿沟）",
+      "label": "否定性问题",
+      "label_full": "否定性问题",
+      "text": "精神分裂症和双相情感障碍没有任何共同症状（用于测试否定性问题处理）"
+    },
+    {
+      "id": 50,
+      "category": "跨障碍/共病类（用于测试多跳推理与语义鸿沟）",
+      "label": "完全编造",
+      "label_full": "完全编造，跨类",
+      "text": "只要同时符合抑郁症和ADHD的三条症状，就可以确诊为\"抑郁多动症\"（图谱中不存在的编造疾病实体）"
+    }
+  ],
+  "corpus": [
+    {
+      "id": 1,
+      "category": "抑郁症",
+      "label": "真实",
+      "label_full": "真实",
+      "text": "抑郁症患者常伴有睡眠紊乱，可能表现为失眠或嗜睡"
+    },
+    {
+      "id": 2,
+      "category": "抑郁症",
+      "label": "真实",
+      "label_full": "真实",
+      "text": "重度抑郁症与焦虑障碍经常共病"
+    },
+    {
+      "id": 3,
+      "category": "抑郁症",
+      "label": "真实",
+      "label_full": "真实",
+      "text": "SSRI类药物是治疗抑郁症的常见选择之一"
+    },
+    {
+      "id": 4,
+      "category": "抑郁症",
+      "label": "轻度夸大",
+      "label_full": "轻度夸大",
+      "text": "抑郁症患者一定会有自杀念头"
+    },
+    {
+      "id": 5,
+      "category": "抑郁症",
+      "label": "因果颠倒",
+      "label_full": "因果颠倒",
+      "text": "抑郁症是因为体内血清素完全缺失导致的，补充血清素就能根治"
+    },
+    {
+      "id": 6,
+      "category": "抑郁症",
+      "label": "完全编造",
+      "label_full": "完全编造",
+      "text": "抑郁症患者不能吃辛辣食物，否则会加重病情"
+    },
+    {
+      "id": 7,
+      "category": "抑郁症",
+      "label": "完全编造",
+      "label_full": "完全编造",
+      "text": "抑郁症和缺乏维生素D没有任何关系（此为图谱中未明确覆盖，若图谱无该边则应判定为\"无相关记录\"而非编造，注意区分）"
+    },
+    {
+      "id": 8,
+      "category": "焦虑障碍",
+      "label": "真实",
+      "label_full": "真实",
+      "text": "广泛性焦虑障碍常伴有肌肉紧张、心悸等躯体症状"
+    },
+    {
+      "id": 9,
+      "category": "焦虑障碍",
+      "label": "真实",
+      "label_full": "真实",
+      "text": "焦虑障碍与抑郁症共病率较高"
+    },
+    {
+      "id": 10,
+      "category": "焦虑障碍",
+      "label": "真实",
+      "label_full": "真实",
+      "text": "认知行为疗法（CBT）常用于治疗焦虑障碍"
+    },
+    {
+      "id": 11,
+      "category": "焦虑障碍",
+      "label": "轻度夸大",
+      "label_full": "轻度夸大",
+      "text": "只要心跳加快就说明你有焦虑障碍"
+    },
+    {
+      "id": 12,
+      "category": "焦虑障碍",
+      "label": "因果颠倒",
+      "label_full": "因果颠倒",
+      "text": "焦虑障碍是因为咖啡因摄入过多导致的，戒咖啡就能痊愈"
+    },
+    {
+      "id": 13,
+      "category": "焦虑障碍",
+      "label": "完全编造",
+      "label_full": "完全编造",
+      "text": "焦虑障碍患者必须终身服药，一旦停药就会复发到更严重程度"
+    },
+    {
+      "id": 14,
+      "category": "焦虑障碍",
+      "label": "完全编造",
+      "label_full": "完全编造",
+      "text": "社交焦虑障碍和内向性格本质上是同一种疾病"
+    },
+    {
+      "id": 15,
+      "category": "PTSD",
+      "label": "真实",
+      "label_full": "真实",
+      "text": "PTSD可能包含闪回、回避行为、过度警觉等症状群"
+    },
+    {
+      "id": 16,
+      "category": "PTSD",
+      "label": "真实",
+      "label_full": "真实",
+      "text": "PTSD常与抑郁症、物质使用障碍共病"
+    },
+    {
+      "id": 17,
+      "category": "PTSD",
+      "label": "真实",
+      "label_full": "真实",
+      "text": "暴露疗法是PTSD的干预方式之一"
+    },
+    {
+      "id": 18,
+      "category": "PTSD",
+      "label": "轻度夸大",
+      "label_full": "轻度夸大",
+      "text": "经历过创伤事件的人一定会得PTSD"
+    },
+    {
+      "id": 19,
+      "category": "PTSD",
+      "label": "因果颠倒",
+      "label_full": "因果颠倒",
+      "text": "PTSD患者一提起创伤事件就会立刻复发，所以永远不能让他们回忆"
+    },
+    {
+      "id": 20,
+      "category": "PTSD",
+      "label": "完全编造",
+      "label_full": "完全编造",
+      "text": "PTSD可以通过抗生素治疗"
+    },
+    {
+      "id": 21,
+      "category": "PTSD",
+      "label": "完全编造",
+      "label_full": "完全编造",
+      "text": "PTSD只发生在退伍军人身上"
+    },
+    {
+      "id": 22,
+      "category": "精神分裂症",
+      "label": "真实",
+      "label_full": "真实",
+      "text": "精神分裂症的核心症状包括幻觉、妄想等阳性症状"
+    },
+    {
+      "id": 23,
+      "category": "精神分裂症",
+      "label": "真实",
+      "label_full": "真实",
+      "text": "精神分裂症也可能表现出情感淡漠等阴性症状"
+    },
+    {
+      "id": 24,
+      "category": "精神分裂症",
+      "label": "真实",
+      "label_full": "真实",
+      "text": "抗精神病药物是精神分裂症的主要治疗手段之一"
+    },
+    {
+      "id": 25,
+      "category": "精神分裂症",
+      "label": "轻度夸大",
+      "label_full": "轻度夸大",
+      "text": "精神分裂症就是人格分裂"
+    },
+    {
+      "id": 26,
+      "category": "精神分裂症",
+      "label": "因果颠倒",
+      "label_full": "因果颠倒",
+      "text": "精神分裂症是因为小时候受到的惊吓太多导致的"
+    },
+    {
+      "id": 27,
+      "category": "精神分裂症",
+      "label": "完全编造",
+      "label_full": "完全编造",
+      "text": "精神分裂症患者都有暴力倾向"
+    },
+    {
+      "id": 28,
+      "category": "精神分裂症",
+      "label": "完全编造",
+      "label_full": "完全编造",
+      "text": "精神分裂症可以通过抗精神病药物根治，痊愈后无需再服药"
+    },
+    {
+      "id": 29,
+      "category": "ADHD",
+      "label": "真实",
+      "label_full": "真实",
+      "text": "ADHD核心症状包括注意力不集中、多动、冲动"
+    },
+    {
+      "id": 30,
+      "category": "ADHD",
+      "label": "真实",
+      "label_full": "真实",
+      "text": "ADHD和焦虑障碍、抑郁症有较高共病率"
+    },
+    {
+      "id": 31,
+      "category": "ADHD",
+      "label": "真实",
+      "label_full": "真实",
+      "text": "ADHD患者可能存在睡眠相关问题"
+    },
+    {
+      "id": 32,
+      "category": "ADHD",
+      "label": "轻度夸大",
+      "label_full": "轻度夸大",
+      "text": "ADHD的人一定学习成绩差"
+    },
+    {
+      "id": 33,
+      "category": "ADHD",
+      "label": "因果颠倒",
+      "label_full": "因果颠倒",
+      "text": "ADHD是因为电子产品用多了导致的"
+    },
+    {
+      "id": 34,
+      "category": "ADHD",
+      "label": "完全编造",
+      "label_full": "完全编造",
+      "text": "ADHD患者晚上必须吃褪黑素才能入睡，否则症状会恶化"
+    },
+    {
+      "id": 35,
+      "category": "ADHD",
+      "label": "完全编造",
+      "label_full": "完全编造",
+      "text": "ADHD只发生在儿童身上，成年后会自动消失"
+    },
+    {
+      "id": 36,
+      "category": "ADHD",
+      "label": "完全编造",
+      "label_full": "完全编造",
+      "text": "报复性熬夜就是ADHD的诊断标准之一"
+    },
+    {
+      "id": 37,
+      "category": "双相情感障碍",
+      "label": "真实",
+      "label_full": "真实",
+      "text": "双相情感障碍包含躁狂/轻躁狂发作与抑郁发作交替的特征"
+    },
+    {
+      "id": 38,
+      "category": "双相情感障碍",
+      "label": "真实",
+      "label_full": "真实",
+      "text": "双相情感障碍常与焦虑障碍共病"
+    },
+    {
+      "id": 39,
+      "category": "双相情感障碍",
+      "label": "真实",
+      "label_full": "真实",
+      "text": "情绪稳定剂是双相情感障碍常见治疗药物类别之一"
+    },
+    {
+      "id": 40,
+      "category": "双相情感障碍",
+      "label": "轻度夸大",
+      "label_full": "轻度夸大",
+      "text": "情绪起伏大就是双相情感障碍"
+    },
+    {
+      "id": 41,
+      "category": "双相情感障碍",
+      "label": "因果颠倒",
+      "label_full": "因果颠倒",
+      "text": "双相情感障碍是因为性格太极端导致的"
+    },
+    {
+      "id": 42,
+      "category": "双相情感障碍",
+      "label": "完全编造",
+      "label_full": "完全编造",
+      "text": "双相情感障碍患者在躁狂期智商会显著提高"
+    },
+    {
+      "id": 43,
+      "category": "双相情感障碍",
+      "label": "完全编造",
+      "label_full": "完全编造",
+      "text": "双相情感障碍可以完全通过冥想治愈，无需药物"
+    },
+    {
+      "id": 44,
+      "category": "跨障碍/共病类（用于测试多跳推理与语义鸿沟）",
+      "label": "真实",
+      "label_full": "真实，需多跳",
+      "text": "ADHD与抑郁症虽不直接等价，但两者可能通过共同的焦虑症状产生关联"
+    },
+    {
+      "id": 45,
+      "category": "跨障碍/共病类（用于测试多跳推理与语义鸿沟）",
+      "label": "真实",
+      "label_full": "真实，需多跳",
+      "text": "PTSD与抑郁症的共病可能与两者共享的睡眠紊乱症状有关"
+    },
+    {
+      "id": 46,
+      "category": "跨障碍/共病类（用于测试多跳推理与语义鸿沟）",
+      "label": "语义鸿沟",
+      "label_full": "语义鸿沟",
+      "text": "精神内耗是一种脑子转不动的表现（口语热词，图谱中无对应术语）"
+    },
+    {
+      "id": 47,
+      "category": "跨障碍/共病类（用于测试多跳推理与语义鸿沟）",
+      "label": "语义鸿沟",
+      "label_full": "语义鸿沟",
+      "text": "emo了是不是就是抑郁症发作（口语热词，图谱中无对应术语）"
+    },
+    {
+      "id": 48,
+      "category": "跨障碍/共病类（用于测试多跳推理与语义鸿沟）",
+      "label": "否定性问题",
+      "label_full": "否定性问题",
+      "text": "抑郁症和ADHD之间不存在任何关系（用于测试RAG对\"不存在\"类问题的处理）"
+    },
+    {
+      "id": 49,
+      "category": "跨障碍/共病类（用于测试多跳推理与语义鸿沟）",
+      "label": "否定性问题",
+      "label_full": "否定性问题",
+      "text": "精神分裂症和双相情感障碍没有任何共同症状（用于测试否定性问题处理）"
+    },
+    {
+      "id": 50,
+      "category": "跨障碍/共病类（用于测试多跳推理与语义鸿沟）",
+      "label": "完全编造",
+      "label_full": "完全编造，跨类",
+      "text": "只要同时符合抑郁症和ADHD的三条症状，就可以确诊为\"抑郁多动症\"（图谱中不存在的编造疾病实体）"
+    }
+  ],
+  "corpus_stats": {
+    "by_category": [
+      {
+        "label": "ADHD",
+        "count": 8
+      },
+      {
+        "label": "抑郁症",
+        "count": 7
+      },
+      {
+        "label": "焦虑障碍",
+        "count": 7
+      },
+      {
+        "label": "PTSD",
+        "count": 7
+      },
+      {
+        "label": "精神分裂症",
+        "count": 7
+      },
+      {
+        "label": "双相情感障碍",
+        "count": 7
+      },
+      {
+        "label": "跨障碍/共病类（用于测试多跳推理与语义鸿沟）",
+        "count": 7
+      }
+    ],
+    "by_label": [
+      {
+        "label": "真实",
+        "count": 20
+      },
+      {
+        "label": "轻度夸大",
+        "count": 6
+      },
+      {
+        "label": "因果颠倒",
+        "count": 6
+      },
+      {
+        "label": "完全编造",
+        "count": 14
+      },
+      {
+        "label": "语义鸿沟",
+        "count": 2
+      },
+      {
+        "label": "否定性问题",
+        "count": 2
+      }
+    ]
+  },
+  "family_distribution": [
+    {
+      "name": "neurocognitive_disorders",
+      "label": "神经认知障碍",
+      "count": 28,
+      "ratio": 0.3684
+    },
+    {
+      "name": "psychotic_disorders",
+      "label": "精神病性障碍",
+      "count": 10,
+      "ratio": 0.1316
+    },
+    {
+      "name": "personality_disorders",
+      "label": "人格障碍",
+      "count": 9,
+      "ratio": 0.1184
+    },
+    {
+      "name": "anxiety_disorders",
+      "label": "焦虑障碍",
+      "count": 8,
+      "ratio": 0.1053
+    },
+    {
+      "name": "depressive_disorders",
+      "label": "抑郁障碍",
+      "count": 7,
+      "ratio": 0.0921
+    },
+    {
+      "name": "autism_adhd_disorders",
+      "label": "自闭症/ADHD",
+      "count": 5,
+      "ratio": 0.0658
+    },
+    {
+      "name": "eating_disorders",
+      "label": "进食障碍",
+      "count": 3,
+      "ratio": 0.0395
+    },
+    {
+      "name": "trauma_stress_disorders",
+      "label": "创伤应激障碍",
+      "count": 3,
+      "ratio": 0.0395
+    },
+    {
+      "name": "bipolar_disorders",
+      "label": "双相障碍",
+      "count": 2,
+      "ratio": 0.0263
+    },
+    {
+      "name": "obsessive_compulsive_disorders",
+      "label": "强迫相关障碍",
+      "count": 1,
+      "ratio": 0.0132
+    }
+  ],
+  "top_nodes": [
+    {
+      "name": "焦虑障碍",
+      "degree": 250
+    },
+    {
+      "name": "阿尔茨海默病",
+      "degree": 117
+    },
+    {
+      "name": "分裂情感性障碍",
+      "degree": 85
+    },
+    {
+      "name": "精神分裂症",
+      "degree": 79
+    },
+    {
+      "name": "包涵体肌病-佩吉特骨病-额颞叶痴呆综合征",
+      "degree": 62
+    },
+    {
+      "name": "bipolar disorder",
+      "degree": 59
+    },
+    {
+      "name": "autism spectrum disorder due to AUTS2 deficiency",
+      "degree": 54
+    },
+    {
+      "name": "drug psychosis",
+      "degree": 41
+    }
+  ]
+}

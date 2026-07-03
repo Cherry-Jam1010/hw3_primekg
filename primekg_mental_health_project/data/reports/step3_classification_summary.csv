@@ -1,0 +1,3 @@
+embedding_model,sample_count,class_count,accuracy,macro_f1,weighted_f1,cv_splits,classes,excluded_class_count,excluded_sample_count,missing_entity_sample_count
+rotate,61,7,0.4262295081967213,0.28891367613172125,0.389767504090196,3,"['anxiety_disorders', 'autism_adhd_disorders', 'depressive_disorders', 'eating_disorders', 'neurocognitive_disorders', 'personality_disorders', 'psychotic_disorders']",3,5,10
+transe,61,7,0.4262295081967213,0.2430300933932895,0.3922994482594371,3,"['anxiety_disorders', 'autism_adhd_disorders', 'depressive_disorders', 'eating_disorders', 'neurocognitive_disorders', 'personality_disorders', 'psychotic_disorders']",3,5,10

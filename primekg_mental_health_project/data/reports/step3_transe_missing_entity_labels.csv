@@ -1,0 +1,11 @@
+disease_id,disease_name,seed_family,exclusion_reason,keep,entity_label,entity_index
+3740,AIDS phobia,anxiety_disorders,missing_trained_entity,True,disease::3740,
+16052,atypical autism,autism_adhd_disorders,missing_trained_entity,True,disease::16052,
+20689,AIDS dementia complex,neurocognitive_disorders,missing_trained_entity,True,disease::20689,
+20144,cerebrovascular dementia,neurocognitive_disorders,missing_trained_entity,True,disease::20144,
+19976,dementia pugilistica,neurocognitive_disorders,missing_trained_entity,True,disease::19976,
+1159,multiple personality disorder,personality_disorders,missing_trained_entity,True,disease::1159,
+5465,methamphetamine-induced psychosis,psychotic_disorders,missing_trained_entity,True,disease::5465,
+18623,postpartum psychosis,psychotic_disorders,missing_trained_entity,True,disease::18623,
+4630,substance-induced psychosis,psychotic_disorders,missing_trained_entity,True,disease::4630,
+5467,occupation-related stress disorder,trauma_stress_disorders,missing_trained_entity,True,disease::5467,

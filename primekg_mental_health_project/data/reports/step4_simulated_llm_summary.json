@@ -1,0 +1,34 @@
+{
+  "sample_count": 60,
+  "accuracy": 0.8,
+  "hallucination_rate": 0.19999999999999996,
+  "by_label": {
+    "false": {
+      "count": 30,
+      "accuracy": 0.7333333333333333
+    },
+    "real": {
+      "count": 30,
+      "accuracy": 0.8666666666666667
+    }
+  },
+  "by_false_type": {
+    "fabricated": {
+      "count": 10,
+      "accuracy": 0.9
+    },
+    "hierarchy_error": {
+      "count": 10,
+      "accuracy": 0.6
+    },
+    "polarity_flip": {
+      "count": 10,
+      "accuracy": 0.7
+    },
+    "real": {
+      "count": 30,
+      "accuracy": 0.8666666666666667
+    }
+  },
+  "note": "This summary is based on the simulated baseline, not a live LLM."
+}

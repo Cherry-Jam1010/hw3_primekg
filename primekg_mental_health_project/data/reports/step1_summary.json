@@ -1,0 +1,138 @@
+{
+  "seed_disease_count": 76,
+  "subgraph_edge_count": 2646,
+  "subgraph_node_count": 732,
+  "connected_component_count": 3,
+  "node_type_distribution": {
+    "disease": 66,
+    "drug": 367,
+    "effect/phenotype": 299
+  },
+  "relation_group_distribution": {
+    "disease_drug": 1666,
+    "disease_phenotype": 886,
+    "disease_disease": 94
+  },
+  "display_relation_distribution": {
+    "contraindication": 1010,
+    "phenotype present": 878,
+    "indication": 518,
+    "off-label use": 138,
+    "parent-child": 94,
+    "phenotype absent": 8
+  },
+  "seed_family_distribution": {
+    "neurocognitive_disorders": 28,
+    "psychotic_disorders": 10,
+    "personality_disorders": 9,
+    "anxiety_disorders": 8,
+    "depressive_disorders": 7,
+    "autism_adhd_disorders": 5,
+    "eating_disorders": 3,
+    "trauma_stress_disorders": 3,
+    "bipolar_disorders": 2,
+    "obsessive_compulsive_disorders": 1
+  },
+  "top_disease_nodes": [
+    {
+      "node_id": "8187_2050_5618_5451_5371_100081_5383_1942_1098_3265_11924_12384",
+      "node_name": "anxiety disorder",
+      "degree": 250
+    },
+    {
+      "node_id": "11913_7088_11743_12153_7089_11194_12321_15140_4975_11561_11647_11777_12344_12609_12630_12631_14265_10422_14036_14316_100088",
+      "node_name": "Alzheimer disease",
+      "degree": 117
+    },
+    {
+      "node_id": "5487",
+      "node_name": "schizoaffective disorder",
+      "degree": 85
+    },
+    {
+      "node_id": "5090_13498_8414_10897_33312_10943_11552_14092_12054_11960_11280_11294_11295_11298_11307_11498_12879_13089_13506",
+      "node_name": "schizophrenia",
+      "degree": 79
+    },
+    {
+      "node_id": "8178_507",
+      "node_name": "inclusion body myopathy with Paget disease of bone and frontotemporal dementia",
+      "degree": 62
+    },
+    {
+      "node_id": "4985_693_24613_1866",
+      "node_name": "bipolar disorder",
+      "degree": 59
+    },
+    {
+      "node_id": "14361",
+      "node_name": "autism spectrum disorder due to AUTS2 deficiency",
+      "degree": 54
+    },
+    {
+      "node_id": "6730",
+      "node_name": "drug psychosis",
+      "degree": 41
+    },
+    {
+      "node_id": "19939",
+      "node_name": "early-onset schizophrenia",
+      "degree": 39
+    },
+    {
+      "node_id": "8114_1158",
+      "node_name": "obsessive-compulsive disorder",
+      "degree": 39
+    },
+    {
+      "node_id": "17160",
+      "node_name": "behavioral variant of frontotemporal dementia",
+      "degree": 35
+    },
+    {
+      "node_id": "17161",
+      "node_name": "frontotemporal dementia with motor neuron disease",
+      "degree": 34
+    },
+    {
+      "node_id": "12048",
+      "node_name": "endogenous depression",
+      "degree": 27
+    },
+    {
+      "node_id": "2009_12050_12100",
+      "node_name": "major depressive disorder",
+      "degree": 27
+    },
+    {
+      "node_id": "10857",
+      "node_name": "semantic dementia",
+      "degree": 26
+    },
+    {
+      "node_id": "5263",
+      "node_name": "unipolar depression",
+      "degree": 26
+    },
+    {
+      "node_id": "3709",
+      "node_name": "agoraphobia",
+      "degree": 25
+    },
+    {
+      "node_id": "19977",
+      "node_name": "parkinsonism with dementia of Guadeloupe",
+      "degree": 25
+    },
+    {
+      "node_id": "24612",
+      "node_name": "manic bipolar affective disorder",
+      "degree": 24
+    },
+    {
+      "node_id": "18475",
+      "node_name": "PRKAR1B-related neurodegenerative dementia with intermediate filaments",
+      "degree": 23
+    }
+  ]
+}

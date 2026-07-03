@@ -1,0 +1,28 @@
+[
+  {
+    "model":"RotatE",
+    "epochs":30,
+    "embedding_dim":64,
+    "batch_size":256,
+    "learning_rate":0.001,
+    "device":"cpu",
+    "mr":129.0485839844,
+    "mrr":0.1631705612,
+    "hits_at_1":0.0910931174,
+    "hits_at_3":0.1659919028,
+    "hits_at_10":0.3198380567
+  },
+  {
+    "model":"TransE",
+    "epochs":30,
+    "embedding_dim":64,
+    "batch_size":256,
+    "learning_rate":0.001,
+    "device":"cpu",
+    "mr":263.3481750488,
+    "mrr":0.0158496033,
+    "hits_at_1":0.0,
+    "hits_at_3":0.008097166,
+    "hits_at_10":0.0344129555
+  }
+]

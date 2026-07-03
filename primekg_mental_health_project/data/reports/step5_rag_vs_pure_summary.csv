@@ -1,0 +1,3 @@
+system,sample_count,accuracy,hallucination_rate
+rag_verifier,60,1.0,0.0
+pure_llm_simulated,60,0.8,0.19999999999999996

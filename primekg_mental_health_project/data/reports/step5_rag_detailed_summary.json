@@ -1,0 +1,32 @@
+{
+  "rag_accuracy": 1.0,
+  "rag_by_label": {
+    "false": {
+      "count": 30,
+      "accuracy": 1.0
+    },
+    "real": {
+      "count": 30,
+      "accuracy": 1.0
+    }
+  },
+  "rag_by_false_type": {
+    "fabricated": {
+      "count": 10,
+      "accuracy": 1.0
+    },
+    "hierarchy_error": {
+      "count": 10,
+      "accuracy": 1.0
+    },
+    "polarity_flip": {
+      "count": 10,
+      "accuracy": 1.0
+    },
+    "real": {
+      "count": 30,
+      "accuracy": 1.0
+    }
+  },
+  "note": "This Step 5 baseline uses TF-IDF retrieval plus exact triplet evidence, not a generative RAG LLM."
+}

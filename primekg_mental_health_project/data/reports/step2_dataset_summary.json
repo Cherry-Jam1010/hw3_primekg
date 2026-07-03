@@ -1,0 +1,10 @@
+{
+  "triple_count": 2646,
+  "entity_count": 732,
+  "relation_count": 6,
+  "train_count": 2151,
+  "valid_count": 248,
+  "test_count": 247,
+  "source_subgraph": "E:\\Grade_2_2\\ai\\hw3\\primekg_mental_health_project\\data\\processed\\mental_health_subgraph.csv",
+  "source_seed_file": "E:\\Grade_2_2\\ai\\hw3\\primekg_mental_health_project\\data\\processed\\mental_health_seed_diseases.csv"
+}

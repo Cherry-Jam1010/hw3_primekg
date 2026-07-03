@@ -1,0 +1,8 @@
+,anxiety_disorders,autism_adhd_disorders,depressive_disorders,eating_disorders,neurocognitive_disorders,personality_disorders,psychotic_disorders
+anxiety_disorders,3,0,3,0,1,0,0
+autism_adhd_disorders,1,0,1,0,2,0,0
+depressive_disorders,2,0,0,0,5,0,0
+eating_disorders,1,0,0,0,1,0,1
+neurocognitive_disorders,0,1,2,0,19,3,0
+personality_disorders,0,0,1,0,3,3,1
+psychotic_disorders,0,0,1,2,3,0,1

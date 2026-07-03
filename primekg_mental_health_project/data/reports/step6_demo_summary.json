@@ -1,0 +1,9 @@
+{
+  "html_path": "E:\\Grade_2_2\\ai\\hw3\\primekg_mental_health_project\\demo\\index.html",
+  "payload_path": "E:\\Grade_2_2\\ai\\hw3\\primekg_mental_health_project\\demo\\demo_payload.json",
+  "recommended_url": "http://127.0.0.1:8765/",
+  "claim_count": 60,
+  "corpus_count": 50,
+  "generated_at": "2026-07-03 11:08",
+  "note": "Open demo/index.html directly, or visit the local demo server if it is running."
+}

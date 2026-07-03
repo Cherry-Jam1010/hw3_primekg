@@ -1,0 +1,16 @@
+{
+  "total_samples": 60,
+  "real_samples": 30,
+  "false_samples": 30,
+  "by_relation_group": {
+    "disease_drug": 23,
+    "disease_disease": 20,
+    "disease_phenotype": 17
+  },
+  "by_false_type": {
+    "real": 30,
+    "polarity_flip": 10,
+    "hierarchy_error": 10,
+    "fabricated": 10
+  }
+}
